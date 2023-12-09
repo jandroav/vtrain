@@ -3,7 +3,7 @@ module github.com/jandroav/vtrain
 go 1.19
 
 require (
-	github.com/TwiN/go-color v1.4.0
+	github.com/TwiN/go-color v1.4.1
 	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.8.0
