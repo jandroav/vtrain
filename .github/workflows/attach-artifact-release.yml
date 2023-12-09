@@ -1,0 +1,115 @@
+name: Attach Artifact to Release
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  attach-to-release:
+    name: Attach Artifact to Release
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install upx
+        run: |
+          sudo apt-get update
+          sudo apt-get install upx
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.21.4'
+            
+      - name: Get Reusable Script Files
+        run: |
+          chmod +x release.sh
+
+      - name: Get Artifact ID
+        id: get-artifact-id
+        run: echo "artifact_id=$(grep "vtrainVersion" "./pkg/common/utilities.go" | awk -F'"' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Backup release body
+        run: |
+          release_id=$(curl -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases?per_page=1 | jq -r '.[] | select(.name == "${{ env.artifact_id }}") | .id')
+          # Check if release_id is empty
+          if [ -z "$release_id" ]; then
+              echo "Release '$release_name' not found in the repository '$repo'."
+              exit 1
+          fi
+          release_url="https://api.github.com/repos/${{ github.repository }}/releases/$release_id"
+          curl -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$release_url" | jq -r .body > release_body.txt
+
+      - name: Store previous release body as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: release_body.txt
+          path: release_body.txt
+
+      - name: Delete tag and release
+        uses: dev-drprasad/delete-tag-and-release@v1.0
+        with:
+          tag_name: ${{ env.artifact_id }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          delete_release: true
+
+      - name: Install dependencies
+        run: |
+          go version
+          go get
+
+      - name: Generate distributions
+        run: sh release.sh
+
+      - name: Upload Windows binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: vtrain_windows.zip
+          asset_name: vtrain_windows_$tag.zip
+          tag: ${{ env.artifact_id }}
+          overwrite: true
+      
+      - name: Upload Linux binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: vtrain_linux.zip
+          asset_name: vtrain_linux_$tag.zip
+          tag: ${{ env.artifact_id }}
+          overwrite: true
+
+      - name: Upload macOS Silicon binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: vtrain_mac_arm.zip
+          asset_name: vtrain_mac_arm_$tag.zip
+          tag: ${{ env.artifact_id }}
+          overwrite: true
+
+      - name: Upload macOS Intel binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: vtrain_mac_intel.zip
+          asset_name: vtrain_mac_intel_$tag.zip
+          tag: ${{ env.artifact_id }}
+          overwrite: true
+
+      - name: Get latest release ID
+        id: get-release
+        run: |
+          LATEST_RELEASE=$(curl -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=1" | jq -r '.[].id')
+          echo "Latest Release ID: $LATEST_RELEASE"
+          echo "RELEASE_ID=$LATEST_RELEASE" >> $GITHUB_ENV
+
+      - name: Edit Release
+        uses: irongut/EditRelease@v1.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          id: ${{ env.RELEASE_ID }}
+          name: ${{ env.artifact_id }}
+          replacename: true
