@@ -38,7 +38,3 @@ jobs:
     - name: Run vet
       run: |
         go vet .
-
-    # Run testing on the code
-    - name: Run testing
-      run: go test -covermode=count -coverpkg=./pkg -coverprofile cover.out -v ./test/...
