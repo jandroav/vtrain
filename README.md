@@ -23,13 +23,8 @@ Ejemplo de las últimas 2 semanas:
 
 ![](/doc/img/sample.png)
 
-
-* [Contribuye con vtrain](/doc/development.md)
-* [CLI guidelines](/doc/guidelines.md)
-* [FAQ](/doc/faq.md)
-
 ## Getting Started
-1. Instala `vtrain``
+1. Instala `vtrain`
    * Descarga `vtrain` para tu sistema operativo [aquí](https://github.com/jandroav/vtrain/releases)
    * Descomprímelo dónde quieras
    * Si estás en Linux ejecuta `chmod +x vtrain`
