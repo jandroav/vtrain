@@ -293,7 +293,6 @@ func CreatePlan(vtrainConfig structs.VtrainConfig, distance string, raceDate str
 }
 
 func printPaces(distance string, raceTime string) {
-
 	distanceInt, err := strconv.Atoi(distance)
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -304,7 +303,6 @@ func printPaces(distance string, raceTime string) {
 		fmt.Println("Error:", err)
 		return
 	}
-
 	runningPaces := calculateTrainingPaces(vdot)
 	fmt.Println(color.Colorize(color.Green, "\nVDOT: "+strconv.Itoa(vdot)))
 	fmt.Println(color.Colorize(color.Yellow, "Ritmos de entrenamiento"))
