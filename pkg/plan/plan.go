@@ -308,11 +308,9 @@ func printPaces(distance string, raceTime string) {
 	runningPaces := calculateTrainingPaces(vdot)
 	fmt.Println(color.Colorize(color.Green, "\nVDOT: "+strconv.Itoa(vdot)))
 	fmt.Println(color.Colorize(color.Yellow, "Ritmos de entrenamiento"))
-	fmt.Println(color.Colorize(color.Yellow, "Suave: "+runningPaces["Suave"]))
-	fmt.Println(color.Colorize(color.Yellow, "Ritmo Maratón: "+runningPaces["Ritmo Maraton"]))
-	fmt.Println(color.Colorize(color.Yellow, "Umbral: "+runningPaces["Umbral"]))
-	fmt.Println(color.Colorize(color.Yellow, "Intervalo: "+runningPaces["Interval"]))
-	fmt.Println(color.Colorize(color.Yellow, "Repetición (Ritmo 400m): "+runningPaces["Repeticion"]))
+	fmt.Println(color.Colorize(color.Yellow, "(S) Suave: "+runningPaces["Suave"]))
+	fmt.Println(color.Colorize(color.Yellow, "(M) Ritmo Maratón: "+runningPaces["Ritmo Maraton"]))
+	fmt.Println(color.Colorize(color.Yellow, "(U) Umbral: "+runningPaces["Umbral"]))
+	fmt.Println(color.Colorize(color.Yellow, "(I) Intervalo: "+runningPaces["Interval"]))
+	fmt.Println(color.Colorize(color.Yellow, "(R) Repetición (Ritmo 400m): "+runningPaces["Repeticion"]))
 }
-
-

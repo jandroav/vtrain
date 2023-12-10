@@ -8,9 +8,9 @@ planConfig:
       km-21: 81k
     s2:
       c1-42: 3S + 6U + 16S + 2 X 3U C/DESC 2 MIN + 3S (34k)
-      c2-42: 3S + 6 X 1L + 4 X 400 R C/3 MIN S + 3S (14k)
+      c2-42: 3S + 6 X 1I + 4 X 400 R C/3 MIN S + 3S (14k)
       c1-21: 3S + 3U + 6S + 2 X 2U C/DESC 2 MIN + 3S (19k)
-      c2-21: 3S + 3 X 1L + 4 X 400 R C/3 MIN S + 3S (11k)
+      c2-21: 3S + 3 X 1I + 4 X 400 R C/3 MIN S + 3S (11k)
       km-42: 148k
       km-21: 75k
     s3:
@@ -29,9 +29,9 @@ planConfig:
       km-21: 83k
     s5:
       c1-42: 3S + 6U + 16S + 6U + 3S (34k)
-      c2-42: 3S + 3 X 2L C/4 MIN S + 3 X 1L C/2 MIN S + 3S (15k)
+      c2-42: 3S + 3 X 2I C/4 MIN S + 3 X 1I C/2 MIN S + 3S (15k)
       c1-21: 3S + 3U + 8S + 3U + 2S (19k)
-      c2-21: 3S + 3 X 2 L C/4 MIN S + 3 X 1L C/2 MIN S + 3S (15k)
+      c2-21: 3S + 3 X 2 I C/4 MIN S + 3 X 1I C/2 MIN S + 3S (15k)
       km-42: 149k
       km-21: 79k
     s6:
@@ -50,16 +50,16 @@ planConfig:
       km-21: 75k
     s8:
       c1-42: 3S + 6U + 16S + 2 X 3U C/DESC 2 MIN + 3S (34k)
-      c2-42: 3S + 6 X 1L C/2 MIN S + 4 X 400 R C/400 TR + 3 MIN S (12k)
+      c2-42: 3S + 6 X 1I C/2 MIN S + 4 X 400 R C/400 S + 3 MIN S (12k)
       c1-21: 3S + 3U + 7S + 2 X 2U C/DESC 2 MIN + 2S (19k)
-      c2-21: 3S + 5 X 1L C/2 MIN S + 4 X 400 R C/400 TR + 3 MIN S (11k)
+      c2-21: 3S + 5 X 1I C/2 MIN S + 4 X 400 R C/400 S + 3 MIN S (11k)
       km-42: 146k
       km-21: 75k
     s9:
       c1-42: 35S (35k)
-      c2-42: 3S + 3 X 2U C/1 MIN S + 3 X 1L C/2 MIN S + 3 X 400 R C/400 TR + 3S (16k)
+      c2-42: 3S + 3 X 2U C/1 MIN S + 3 X 1I C/2 MIN S + 3 X 400 R C/400 S + 3S (16k)
       c1-21: 18S (18k)
-      c2-21: 3S + 3 X 2U C/1 MIN S + 3 X 1L C/2 MIN S + 3 X 400 R C/400 TR + 3S (16k)
+      c2-21: 3S + 3 X 2U C/1 MIN S + 3 X 1I C/2 MIN S + 3 X 400 R C/400 S + 3S (16k)
       km-42: 151k
       km-21: 79k
     s10: 

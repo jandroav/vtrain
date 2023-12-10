@@ -13,11 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install upx
-        run: |
-          sudo apt-get update
-          sudo apt-get install upx
-
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
