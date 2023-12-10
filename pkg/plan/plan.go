@@ -244,7 +244,6 @@ func CreatePlan(vtrainConfig structs.VtrainConfig, distance string, raceDate str
 				fmt.Printf("\tDomingo\t\t(%s): Día de la carrera!!\n", startDate.AddDate(0, 0, (week-1)*7+7).Format("2006-01-02"))
 			}
 			fmt.Printf("\tKms: %s\n", km42)
-			printPaces(distance, raceTime)
 		}
 		if distanceInt == 21 {
 			// Generate the training sessions for the current week
@@ -286,9 +285,9 @@ func CreatePlan(vtrainConfig structs.VtrainConfig, distance string, raceDate str
 				fmt.Printf("\tDomingo\t\t(%s): Día de la carrera!!\n", startDate.AddDate(0, 0, (week-1)*7+7).Format("2006-01-02"))
 			}
 			fmt.Printf("\tKms: %s\n", km21)
-			printPaces(distance, raceTime)
 		}
 	}
+	printPaces(distance, raceTime)
 	return nil
 }
 
