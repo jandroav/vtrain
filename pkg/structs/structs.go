@@ -13,8 +13,14 @@ type NestedVtrainConfig struct {
 	C242 string `yaml:"c2-42"`
 	C121 string `yaml:"c1-21"`
 	C221 string `yaml:"c2-21"`
+	C110 string `yaml:"c1-10"`
+	C210 string `yaml:"c2-10"`
+	PRE1 string `yaml:"pre1"`
+	PRE2 string `yaml:"pre2"`
+	KMPRE string `yaml:"km-pre"`
 	KM42 string `yaml:"km-42"`
 	KM21 string `yaml:"km-21"`
+	KM10 string `yaml:"km-10"`
 }
 
 // It represents a vtrain week
