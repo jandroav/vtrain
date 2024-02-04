@@ -39,8 +39,8 @@ Crea un nuevo plan de entrenamiento`,
 		// check if raceDate format is YYYY-MM-DD and if distance is 21k or 42k
 		if cm.IsValidDate(raceDate) {
 			if cm.IsValidTime(raceTime) {
-				if distance != "21" && distance != "42" {
-					fmt.Println(color.Colorize(color.Red, "Distancia inválida. Debe ser 21 o 42"))
+				if distance != "21" && distance != "42" && distance != "10" && distance != "0"{
+					fmt.Println(color.Colorize(color.Red, "Distancia inválida. Debe ser 10, 21, 42 o 0 para entrenamiento general"))
 					return
 				}
 				err := pl.CreatePlan(VdotConfig, distance, raceDate, raceTime)
@@ -61,7 +61,7 @@ Crea un nuevo plan de entrenamiento`,
 
 func init() {
 	// distance and raceDate are required flags
-	PlanCmd.Flags().StringVarP(&distance, "distancia", "d", "", "Distancia objetivo (21 o 42)")
+	PlanCmd.Flags().StringVarP(&distance, "distancia", "d", "", "Distancia objetivo (10, 21, 42 o 0 para entrenamiento general)")
 	PlanCmd.MarkFlagRequired("distancia")
 	PlanCmd.Flags().StringVarP(&raceDate, "fechaCarrera", "f", "", "Fecha de la carrera (YYYY-MM-DD)")
 	PlanCmd.MarkFlagRequired("fechaCarrera")

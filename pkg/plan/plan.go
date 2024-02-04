@@ -112,6 +112,10 @@ func getVDOT(targetTime string, raceDistance int) (int, error) {
 		vdotMap = halfMarathonVDOT
 	case 42:
 		vdotMap = marathonVDOT
+	case 10:
+		vdotMap = halfMarathonVDOT
+	case 0:
+		vdotMap = halfMarathonVDOT
 	default:
 		return 0, fmt.Errorf("Distancia no soportada: %d", raceDistance)
 	}
@@ -286,6 +290,88 @@ func CreatePlan(vtrainConfig structs.VtrainConfig, distance string, raceDate str
 			}
 			fmt.Printf("\tKms: %s\n", km21)
 		}
+		if distanceInt == 0 {
+			// Generate the training sessions for the current week
+			c1 := vtrainConfig.PlanConfig[fmt.Sprintf("s%d", week)].PRE1
+			c2 := vtrainConfig.PlanConfig[fmt.Sprintf("s%d", week)].PRE2
+			km21 := vtrainConfig.PlanConfig[fmt.Sprintf("s%d", week)].KMPRE
+
+			// Calculate the scheduled dates for c1 and c2
+			c1Date := startDate.AddDate(0, 0, (week-1)*7+3) // Miercoles
+			c2Date := startDate.AddDate(0, 0, (week-1)*7+6) // Sabado
+
+			// Print or save the training sessions and scheduled dates
+			fmt.Println(color.Colorize(color.Yellow, "\nSemana "+strconv.Itoa(week)))
+			if week != 12 {
+				fmt.Printf("\tLunes\t\t(%s): 10S\n", startDate.AddDate(0, 0, (week-1)*7+1).Format("2006-01-02"))
+			} else {
+				fmt.Printf("\tLunes\t\t(%s): 7S\n", startDate.AddDate(0, 0, (week-1)*7+1).Format("2006-01-02"))
+			}
+			if week != 12 {
+				fmt.Printf("\tMartes\t\t(%s): 10S\n", startDate.AddDate(0, 0, (week-1)*7+2).Format("2006-01-02"))
+			} else {
+				fmt.Printf("\tMartes\t\t(%s): 7S\n", startDate.AddDate(0, 0, (week-1)*7+2).Format("2006-01-02"))
+			}
+			fmt.Println(color.Colorize(color.Red, "\tMiércoles\t("+c1Date.Format("2006-01-02")+"): "+c1))
+			if week != 12 {
+				fmt.Println(color.Colorize(color.Blue, "\tJueves\t\t("+startDate.AddDate(0, 0, (week-1)*7+4).Format("2006-01-02")+"): "+"Descanso"))
+			} else {
+				fmt.Println(color.Colorize(color.Blue, "\tJueves\t\t("+startDate.AddDate(0, 0, (week-1)*7+4).Format("2006-01-02")+"): "+"Descanso"))
+			}
+			if week != 12 {
+				fmt.Printf("\tViernes\t\t(%s): 10S\n", startDate.AddDate(0, 0, (week-1)*7+5).Format("2006-01-02"))
+			} else {
+				fmt.Println(color.Colorize(color.Blue, "\tViernes\t\t("+startDate.AddDate(0, 0, (week-1)*7+5).Format("2006-01-02")+"): "+"Descanso"))
+			}
+			fmt.Println(color.Colorize(color.Red, "\tSábado\t\t("+c2Date.Format("2006-01-02")+"): "+c2))
+			if week != 12 {
+				fmt.Printf("\tDomingo\t\t(%s): 15S\n", startDate.AddDate(0, 0, (week-1)*7+7).Format("2006-01-02"))
+			} else {
+				fmt.Printf("\tDomingo\t\t(%s): Día de la carrera!!\n", startDate.AddDate(0, 0, (week-1)*7+7).Format("2006-01-02"))
+			}
+			fmt.Printf("\tKms: %s\n", km21)
+		}
+		if distanceInt == 10 {
+			// Generate the training sessions for the current week
+			c1 := vtrainConfig.PlanConfig[fmt.Sprintf("s%d", week)].C110
+			c2 := vtrainConfig.PlanConfig[fmt.Sprintf("s%d", week)].C210
+			km10 := vtrainConfig.PlanConfig[fmt.Sprintf("s%d", week)].KM10
+
+			// Calculate the scheduled dates for c1 and c2
+			c1Date := startDate.AddDate(0, 0, (week-1)*7+3) // Miercoles
+			c2Date := startDate.AddDate(0, 0, (week-1)*7+6) // Sabado
+
+			// Print or save the training sessions and scheduled dates
+			fmt.Println(color.Colorize(color.Yellow, "\nSemana "+strconv.Itoa(week)))
+			if week != 12 {
+				fmt.Printf("\tLunes\t\t(%s): 10S\n", startDate.AddDate(0, 0, (week-1)*7+1).Format("2006-01-02"))
+			} else {
+				fmt.Printf("\tLunes\t\t(%s): 7S\n", startDate.AddDate(0, 0, (week-1)*7+1).Format("2006-01-02"))
+			}
+			if week != 12 {
+				fmt.Printf("\tMartes\t\t(%s): 10S\n", startDate.AddDate(0, 0, (week-1)*7+2).Format("2006-01-02"))
+			} else {
+				fmt.Printf("\tMartes\t\t(%s): 7S\n", startDate.AddDate(0, 0, (week-1)*7+2).Format("2006-01-02"))
+			}
+			fmt.Println(color.Colorize(color.Red, "\tMiércoles\t("+c1Date.Format("2006-01-02")+"): "+c1))
+			if week != 12 {
+				fmt.Println(color.Colorize(color.Blue, "\tJueves\t\t("+startDate.AddDate(0, 0, (week-1)*7+4).Format("2006-01-02")+"): "+"Descanso"))
+			} else {
+				fmt.Println(color.Colorize(color.Blue, "\tJueves\t\t("+startDate.AddDate(0, 0, (week-1)*7+4).Format("2006-01-02")+"): "+"Descanso"))
+			}
+			if week != 12 {
+				fmt.Printf("\tViernes\t\t(%s): 10S\n", startDate.AddDate(0, 0, (week-1)*7+5).Format("2006-01-02"))
+			} else {
+				fmt.Println(color.Colorize(color.Blue, "\tViernes\t\t("+startDate.AddDate(0, 0, (week-1)*7+5).Format("2006-01-02")+"): "+"Descanso"))
+			}
+			fmt.Println(color.Colorize(color.Red, "\tSábado\t\t("+c2Date.Format("2006-01-02")+"): "+c2))
+			if week != 12 {
+				fmt.Printf("\tDomingo\t\t(%s): 15S\n", startDate.AddDate(0, 0, (week-1)*7+7).Format("2006-01-02"))
+			} else {
+				fmt.Printf("\tDomingo\t\t(%s): Día de la carrera!!\n", startDate.AddDate(0, 0, (week-1)*7+7).Format("2006-01-02"))
+			}
+			fmt.Printf("\tKms: %s\n", km10)
+		}
 	}
 	printPaces(distance, raceTime)
 	return nil
@@ -310,4 +396,6 @@ func printPaces(distance string, raceTime string) {
 	fmt.Println(color.Colorize(color.Yellow, "(U) Umbral: "+runningPaces["Umbral"]))
 	fmt.Println(color.Colorize(color.Yellow, "(I) Intervalo: "+runningPaces["Interval"]))
 	fmt.Println(color.Colorize(color.Yellow, "(R) Repetición (Ritmo 400m): "+runningPaces["Repeticion"]))
+	fmt.Println(color.Colorize(color.Yellow, "(A/D) Aceleración/Desaceleración: 30\"/50\""))
+
 }
