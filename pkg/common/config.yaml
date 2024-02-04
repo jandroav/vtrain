@@ -11,7 +11,7 @@ planConfig:
       km-pre:
       km-42: 160k
       km-21: 81k
-      km-10: 70k
+      km-10: 71k
     s2:
       c1-42: 3S + 6U + 16S + 2 X 3U C/DESC 2 MIN + 3S (34k)
       c2-42: 3S + 6 X 1I + 4 X 400 R C/3 MIN S + 3S (14k)
@@ -24,7 +24,7 @@ planConfig:
       km-pre:
       km-42: 148k
       km-21: 75k
-      km-10: 70k
+      km-10: 71k
     s3:
       c1-42: 32S (32k)
       c2-42: 20KM PROG -> U 5 KMS + 3S (23k)
@@ -37,7 +37,7 @@ planConfig:
       km-pre:
       km-42: 155k
       km-21: 76k
-      km-10: 73k
+      km-10: 74k
     s4:
       c1-42: 10S + 10M + 2U + 10M + 2U + 3S (37k)
       c2-42: 3S + 8U + 5 MIN S + 6U + 4 MIN S + 5U + 3 MIN S + 2U + 3S (33k)
@@ -50,7 +50,7 @@ planConfig:
       km-pre:
       km-42: 170k
       km-21: 83k
-      km-10: 75k
+      km-10: 76k
     s5:
       c1-42: 3S + 6U + 16S + 6U + 3S (34k)
       c2-42: 3S + 3 X 2I C/4 MIN S + 3 X 1I C/2 MIN S + 3S (15k)
@@ -63,7 +63,7 @@ planConfig:
       km-pre:
       km-42: 149k
       km-21: 79k
-      km-10: 73k
+      km-10: 74k
     s6:
       c1-42: 35S (35k)
       c2-42: 13S + 13M + 2U + 6M + 2U + 2M (38k)
@@ -76,7 +76,7 @@ planConfig:
       km-pre:
       km-42: 173k
       km-21: 82k
-      km-10: 71k
+      km-10: 72k
     s7:
       c1-42: 16KM PROG -> U 6 KMS + 3S (19k)
       c2-42: 3S + 8U + 5MIN S + 6U + 4 MIN S + 5U + 3 MIN S + 3U + 2 MIN S + 2U + 3S (33k)
@@ -88,7 +88,7 @@ planConfig:
       pre2: 4S + 8U + 4S
       km-42: 152k
       km-21: 75k
-      km-10: 70k
+      km-10: 71k
     s8:
       c1-42: 3S + 6U + 16S + 2 X 3U C/DESC 2 MIN + 3S (34k)
       c2-42: 3S + 6 X 1I C/2 MIN S + 4 X 400 R C/400 S + 3 MIN S (12k)
@@ -101,7 +101,7 @@ planConfig:
       km-pre:
       km-42: 146k
       km-21: 75k
-      km-10: 70k
+      km-10: 71k
     s9:
       c1-42: 35S (35k)
       c2-42: 3S + 3 X 2U C/1 MIN S + 3 X 1I C/2 MIN S + 3 X 400 R C/400 S + 3S (16k)
@@ -114,7 +114,7 @@ planConfig:
       km-pre:
       km-42: 151k
       km-21: 79k
-      km-10: 68k
+      km-10: 69k
     s10: 
       c1-42: 10S + 10M + 2U + 10M + 2U + 3S (37k)
       c2-42: 3S + 4 X 3U C/2 MIN S + 3S (18k)
@@ -127,7 +127,7 @@ planConfig:
       km-pre:
       km-42: 155k
       km-21: 81k
-      km-10: 68k
+      km-10: 69k
     s11: 
       c1-42: 3S + 3 X 3U C/2 MIN S + 16E (31k)
       c2-42: 3S + 3 X 3U C/2 MIN S + 3S (17k)
@@ -140,7 +140,7 @@ planConfig:
       km-pre:
       km-42: 148k
       km-21: 77k
-      km-10: 68k
+      km-10: 69k
     s12:
       c1-42: 3S + 4 X 1.2 U C/2 MIN S + 3S (15k)
       c2-42: 7S (7k)
