@@ -1,4 +1,5 @@
 # vtrain
+
 Utilidad para generar planes de entrenamiento de 10k, media maratón y maratón siguiente los métodos de [Jack Daniels](https://en.wikipedia.org/wiki/Jack_Daniels_(coach)) ([VDOT](https://planesmaraton.com/2018/10/20/entrenamiento-de-jack-daniels-el-parametro-vdot/)). Con su metodología he conseguido bajar de 2h46 en maratón (Atenas) en 2019 a 2h36 en Valencia 2022 y 2h28 en Valencia 2023.
 
 Puedes consultar más información en [su libro](https://www.amazon.com/Daniels-Running-Formula-Jack-Tupper/dp/1450431836).
