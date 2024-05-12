@@ -344,7 +344,7 @@ func CreatePlan(vtrainConfig structs.VtrainConfig, distance string, raceDate str
 			// Print or save the training sessions and scheduled dates
 			fmt.Println(color.Colorize(color.Yellow, "\nSemana "+strconv.Itoa(week)))
 			if week != 12 {
-				fmt.Printf("\tLunes\t\t(%s): 5S + 10 A/D + FUERZA + 3S\n", startDate.AddDate(0, 0, (week-1)*7+1).Format("2006-01-02"))
+				fmt.Printf("\tLunes\t\t(%s): 12S + 8 A/D\n", startDate.AddDate(0, 0, (week-1)*7+1).Format("2006-01-02"))
 			} else {
 				fmt.Printf("\tLunes\t\t(%s): 10S\n", startDate.AddDate(0, 0, (week-1)*7+1).Format("2006-01-02"))
 			}
@@ -360,7 +360,7 @@ func CreatePlan(vtrainConfig structs.VtrainConfig, distance string, raceDate str
 				fmt.Println(color.Colorize(color.Blue, "\tJueves\t\t("+startDate.AddDate(0, 0, (week-1)*7+4).Format("2006-01-02")+"): "+"Descanso"))
 			}
 			if week != 12 {
-				fmt.Printf("\tViernes\t\t(%s): 5S + 10 A/D + FUERZA + 3S\n", startDate.AddDate(0, 0, (week-1)*7+5).Format("2006-01-02"))
+				fmt.Printf("\tViernes\t\t(%s): 8S + 10 A/D + FUERZA\n", startDate.AddDate(0, 0, (week-1)*7+5).Format("2006-01-02"))
 			} else {
 				fmt.Println(color.Colorize(color.Blue, "\tViernes\t\t("+startDate.AddDate(0, 0, (week-1)*7+5).Format("2006-01-02")+"): "+"Descanso"))
 			}

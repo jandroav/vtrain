@@ -107,15 +107,15 @@ planConfig:
       c2-42: 3S + 3 X 2U C/1 MIN S + 3 X 1I C/2 MIN S + 3 X 400 R C/400 S + 3S (16k)
       c1-21: 18S (18k)
       c2-21: 3S + 3 X 2U C/1 MIN S + 3 X 1I C/2 MIN S + 3 X 400 R C/400 S + 3S (16k)
-      c1-10: 3S + 5 X 2U C/1 MIN + 3S (11k)
+      c1-10: 3S + 5 X 2U C/1 MIN + 3S (16k)
       c2-10: 4S + 6 x 1I C/400 TR + 2S (12k)
       pre1: 16S
       pre2: 3S + 9U + 3S
       km-pre:
       km-42: 151k
       km-21: 79k
-      km-10: 69k
-    s10: 
+      km-10: 75k
+    s10:
       c1-42: 10S + 10M + 2U + 10M + 2U + 3S (37k)
       c2-42: 3S + 4 X 3U C/2 MIN S + 3S (18k)
       c1-21: 3S + 5M + 2U + 5M + 2U + 2S (19k)
@@ -128,7 +128,7 @@ planConfig:
       km-42: 155k
       km-21: 81k
       km-10: 69k
-    s11: 
+    s11:
       c1-42: 3S + 3 X 3U C/2 MIN S + 16E (31k)
       c2-42: 3S + 3 X 3U C/2 MIN S + 3S (17k)
       c1-21: 3S + 3 X 3U C/2 MIN S + 3S (16k)
