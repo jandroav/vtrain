@@ -791,6 +791,24 @@ function defaultRaceDate() {
   return formatDate(addDays(new Date(), 84));
 }
 
+// Sensible amateur-intermediate goal times per distance.
+// (Marathon 03:30 ≈ VDOT 44; half 01:35 ≈ VDOT 48; 10k 00:42 ≈ VDOT 42.)
+// These are placeholders the user will adjust to their real goal — the
+// important thing is that they're plausible for the distance.
+const DEFAULT_GOAL_TIMES = {
+  42: "03:30:00",
+  21: "01:35:00",
+  10: "00:42:00",
+  0:  "01:35:00",
+};
+
+function syncDefaultGoalTime() {
+  const checked = document.querySelector('input[name="distancia"]:checked');
+  if (!checked) return;
+  const def = DEFAULT_GOAL_TIMES[Number(checked.value)];
+  if (def) document.getElementById("tiempoObjetivo").value = def;
+}
+
 const LANG_STORAGE_KEY = "vtrain.lang";
 const SUPPORTED_LANGS = ["en", "es"];
 let currentLang = "en";
@@ -834,13 +852,17 @@ function setLanguage(lang) {
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(pickInitialLang());
   document.getElementById("fechaCarrera").value = defaultRaceDate();
+  syncDefaultGoalTime();
   updateDistanceCards();
 
   for (const btn of document.querySelectorAll(".lang-toggle button")) {
     btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
   }
   for (const radio of document.querySelectorAll('input[name="distancia"]')) {
-    radio.addEventListener("change", updateDistanceCards);
+    radio.addEventListener("change", () => {
+      updateDistanceCards();
+      syncDefaultGoalTime();
+    });
   }
 
   // Delegated handler for export actions (buttons live inside renderPlan output)

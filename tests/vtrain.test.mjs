@@ -31,7 +31,7 @@ before(() => {
   const stripped = SRC.replace(/document\.addEventListener[\s\S]*$/, "");
   const expose = `
     Object.assign(globalThis, {
-      PLAN_CONFIG, I18N,
+      PLAN_CONFIG, I18N, DEFAULT_GOAL_TIMES,
       HALF_MARATHON_VDOT, MARATHON_VDOT, TEN_K_VDOT,
       PACE_S, PACE_M, PACE_U, PACE_I, PACE_R,
       parseTimeToSeconds, getVDOT, calculatePaces, selectWeek,
@@ -459,6 +459,40 @@ describe("renderPlan output", () => {
     assert.ok(!en.includes("Miércoles"));
     assert.ok(!/\bDescanso\b/.test(en));
     assert.ok(!/Día de la carrera/.test(en));
+  });
+});
+
+// ---------- Default goal times ----------
+
+describe("Default goal times", () => {
+  // Regression: marathon previously stayed at 01:35:00 (a half-marathon time)
+  // when the user picked the marathon card — visually nonsensical for a 42 km race.
+  test("every distance has a default", () => {
+    for (const dist of [42, 21, 10, 0]) {
+      assert.ok(globalThis.DEFAULT_GOAL_TIMES[dist], `no default for ${dist}`);
+    }
+  });
+  test("marathon default is between 2:00 and 5:00 (sane goal range)", () => {
+    const s = globalThis.parseTimeToSeconds(globalThis.DEFAULT_GOAL_TIMES[42]);
+    assert.ok(s >= 2 * 3600,  `marathon default too fast: ${s}s`);
+    assert.ok(s <= 5 * 3600,  `marathon default too slow: ${s}s`);
+  });
+  test("half-marathon default is between 1:00 and 2:30", () => {
+    const s = globalThis.parseTimeToSeconds(globalThis.DEFAULT_GOAL_TIMES[21]);
+    assert.ok(s >= 1 * 3600);
+    assert.ok(s <= 2.5 * 3600);
+  });
+  test("10k default is between 30 and 75 minutes", () => {
+    const s = globalThis.parseTimeToSeconds(globalThis.DEFAULT_GOAL_TIMES[10]);
+    assert.ok(s >= 30 * 60);
+    assert.ok(s <= 75 * 60);
+  });
+  test("each default maps to a VDOT in the supported range (30..70)", () => {
+    for (const dist of [42, 21, 10, 0]) {
+      const t = globalThis.DEFAULT_GOAL_TIMES[dist];
+      const v = globalThis.getVDOT(globalThis.parseTimeToSeconds(t), dist);
+      assert.ok(v >= 30 && v <= 70, `${dist}: ${t} → VDOT ${v} out of range`);
+    }
   });
 });
 
