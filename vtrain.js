@@ -113,145 +113,145 @@ const PLAN_CONFIG = {
   s1: {
     phase: "FI",
     "c1-42": "8S + 8 A/D + 4S (12k)", "c2-42": "22S (22k)",
-    "lun-42": "12S", "mar-42": "20S", "jue-42": "18S", "vie-42": "12S", "dom-42": "26S",
+    "d1-42": "12S", "d2-42": "20S", "d4-42": "18S", "d5-42": "12S", "d7-42": "26S",
     "c1-21": "6S + 8 A/D + 2S (10k)", "c2-21": "14S (14k)",
-    "lun-21": "7S", "mar-21": "12S", "jue-21": "", "vie-21": "8S", "dom-21": "14S",
+    "d1-21": "7S", "d2-21": "12S", "d4-21": "", "d5-21": "8S", "d7-21": "14S",
     "c1-10": "6S + 6 A/D + 2S (10k)", "c2-10": "12S (12k)",
-    "lun-10": "7S", "mar-10": "10S", "jue-10": "", "vie-10": "7S", "dom-10": "12S",
+    "d1-10": "7S", "d2-10": "10S", "d4-10": "", "d5-10": "7S", "d7-10": "12S",
     "pre1": "6S + 8 A/D + 2S (10k)", "pre2": "14S (14k)",
-    "lun-pre": "7S", "mar-pre": "12S", "jue-pre": "", "vie-pre": "8S", "dom-pre": "14S",
+    "d1-pre": "7S", "d2-pre": "12S", "d4-pre": "", "d5-pre": "8S", "d7-pre": "14S",
     "km-pre": "65k", "km-42": "122k", "km-21": "65k", "km-10": "58k",
   },
   s2: {
     phase: "FI",
     "c1-42": "10S + 8 A/D + 4S (14k)", "c2-42": "24S (24k)",
-    "lun-42": "12S", "mar-42": "22S", "jue-42": "20S", "vie-42": "14S", "dom-42": "26S",
+    "d1-42": "12S", "d2-42": "22S", "d4-42": "20S", "d5-42": "14S", "d7-42": "26S",
     "c1-21": "8S + 8 A/D + 2S (12k)", "c2-21": "16S (16k)",
-    "lun-21": "8S", "mar-21": "14S", "jue-21": "", "vie-21": "8S", "dom-21": "16S",
+    "d1-21": "8S", "d2-21": "14S", "d4-21": "", "d5-21": "8S", "d7-21": "16S",
     "c1-10": "8S + 8 A/D + 2S (12k)", "c2-10": "14S (14k)",
-    "lun-10": "8S", "mar-10": "12S", "jue-10": "", "vie-10": "8S", "dom-10": "14S",
+    "d1-10": "8S", "d2-10": "12S", "d4-10": "", "d5-10": "8S", "d7-10": "14S",
     "pre1": "8S + 8 A/D + 2S (12k)", "pre2": "16S (16k)",
-    "lun-pre": "8S", "mar-pre": "14S", "jue-pre": "", "vie-pre": "8S", "dom-pre": "16S",
+    "d1-pre": "8S", "d2-pre": "14S", "d4-pre": "", "d5-pre": "8S", "d7-pre": "16S",
     "km-pre": "74k", "km-42": "132k", "km-21": "74k", "km-10": "68k",
   },
   s3: {
     phase: "FI",
     "c1-42": "10S + 10 A/D + 4S (14k)", "c2-42": "26S (26k)",
-    "lun-42": "14S", "mar-42": "22S", "jue-42": "20S", "vie-42": "14S", "dom-42": "26S",
+    "d1-42": "14S", "d2-42": "22S", "d4-42": "20S", "d5-42": "14S", "d7-42": "26S",
     "c1-21": "8S + 10 A/D + 2S (12k)", "c2-21": "18S (18k)",
-    "lun-21": "8S", "mar-21": "14S", "jue-21": "", "vie-21": "10S", "dom-21": "18S",
+    "d1-21": "8S", "d2-21": "14S", "d4-21": "", "d5-21": "10S", "d7-21": "18S",
     "c1-10": "8S + 10 A/D + 2S (12k)", "c2-10": "16S (16k)",
-    "lun-10": "8S", "mar-10": "12S", "jue-10": "", "vie-10": "8S", "dom-10": "16S",
+    "d1-10": "8S", "d2-10": "12S", "d4-10": "", "d5-10": "8S", "d7-10": "16S",
     "pre1": "8S + 10 A/D + 2S (12k)", "pre2": "18S (18k)",
-    "lun-pre": "8S", "mar-pre": "14S", "jue-pre": "", "vie-pre": "10S", "dom-pre": "18S",
+    "d1-pre": "8S", "d2-pre": "14S", "d4-pre": "", "d5-pre": "10S", "d7-pre": "18S",
     "km-pre": "80k", "km-42": "136k", "km-21": "80k", "km-10": "72k",
   },
   s4: {
     phase: "EQ",
     "c1-42": "3S + 8 X 200 R C/200 TR + 4S (12k)", "c2-42": "28S (28k)",
-    "lun-42": "14S", "mar-42": "22S", "jue-42": "20S", "vie-42": "14S", "dom-42": "28S",
+    "d1-42": "14S", "d2-42": "22S", "d4-42": "20S", "d5-42": "14S", "d7-42": "28S",
     "c1-21": "3S + 6 X 200 R C/200 TR + 3S (10k)", "c2-21": "18S (18k)",
-    "lun-21": "8S", "mar-21": "16S", "jue-21": "", "vie-21": "10S", "dom-21": "18S",
+    "d1-21": "8S", "d2-21": "16S", "d4-21": "", "d5-21": "10S", "d7-21": "18S",
     "c1-10": "3S + 8 X 200 R C/200 TR + 3S (10k)", "c2-10": "14S (14k)",
-    "lun-10": "8S", "mar-10": "14S", "jue-10": "", "vie-10": "8S", "dom-10": "16S",
+    "d1-10": "8S", "d2-10": "14S", "d4-10": "", "d5-10": "8S", "d7-10": "16S",
     "pre1": "3S + 6 X 200 R C/200 TR + 3S (10k)", "pre2": "18S (18k)",
-    "lun-pre": "8S", "mar-pre": "16S", "jue-pre": "", "vie-pre": "10S", "dom-pre": "18S",
+    "d1-pre": "8S", "d2-pre": "16S", "d4-pre": "", "d5-pre": "10S", "d7-pre": "18S",
     "km-pre": "80k", "km-42": "138k", "km-21": "80k", "km-10": "70k",
   },
   s5: {
     phase: "EQ",
     "c1-42": "3S + 6 X 400 R C/400 TR + 4S (14k)", "c2-42": "30S (30k)",
-    "lun-42": "14S", "mar-42": "24S", "jue-42": "22S", "vie-42": "14S", "dom-42": "28S",
+    "d1-42": "14S", "d2-42": "24S", "d4-42": "22S", "d5-42": "14S", "d7-42": "28S",
     "c1-21": "3S + 6 X 400 R C/400 TR + 3S (12k)", "c2-21": "18S (18k)",
-    "lun-21": "8S", "mar-21": "16S", "jue-21": "", "vie-21": "10S", "dom-21": "20S",
+    "d1-21": "8S", "d2-21": "16S", "d4-21": "", "d5-21": "10S", "d7-21": "20S",
     "c1-10": "3S + 6 X 400 R C/400 TR + 3S (12k)", "c2-10": "14S (14k)",
-    "lun-10": "8S", "mar-10": "14S", "jue-10": "", "vie-10": "8S", "dom-10": "16S",
+    "d1-10": "8S", "d2-10": "14S", "d4-10": "", "d5-10": "8S", "d7-10": "16S",
     "pre1": "3S + 6 X 400 R C/400 TR + 3S (12k)", "pre2": "18S (18k)",
-    "lun-pre": "8S", "mar-pre": "16S", "jue-pre": "", "vie-pre": "10S", "dom-pre": "20S",
+    "d1-pre": "8S", "d2-pre": "16S", "d4-pre": "", "d5-pre": "10S", "d7-pre": "20S",
     "km-pre": "84k", "km-42": "146k", "km-21": "84k", "km-10": "72k",
   },
   s6: {
     phase: "EQ",
     "c1-42": "4S + 8 X 400 R C/400 TR + 4S (16k)", "c2-42": "32S (32k)",
-    "lun-42": "16S", "mar-42": "24S", "jue-42": "22S", "vie-42": "16S", "dom-42": "28S",
+    "d1-42": "16S", "d2-42": "24S", "d4-42": "22S", "d5-42": "16S", "d7-42": "28S",
     "c1-21": "3S + 8 X 400 R C/400 TR + 3S (13k)", "c2-21": "20S (20k)",
-    "lun-21": "10S", "mar-21": "16S", "jue-21": "", "vie-21": "10S", "dom-21": "20S",
+    "d1-21": "10S", "d2-21": "16S", "d4-21": "", "d5-21": "10S", "d7-21": "20S",
     "c1-10": "3S + 8 X 400 R C/400 TR + 3S (12k)", "c2-10": "16S (16k)",
-    "lun-10": "8S", "mar-10": "14S", "jue-10": "", "vie-10": "10S", "dom-10": "18S",
+    "d1-10": "8S", "d2-10": "14S", "d4-10": "", "d5-10": "10S", "d7-10": "18S",
     "pre1": "3S + 8 X 400 R C/400 TR + 3S (13k)", "pre2": "20S (20k)",
-    "lun-pre": "10S", "mar-pre": "16S", "jue-pre": "", "vie-pre": "10S", "dom-pre": "20S",
+    "d1-pre": "10S", "d2-pre": "16S", "d4-pre": "", "d5-pre": "10S", "d7-pre": "20S",
     "km-pre": "89k", "km-42": "154k", "km-21": "89k", "km-10": "78k",
   },
   s7: {
     phase: "TQ",
     "c1-42": "6S + 5 X 1000 I C/3 MIN TR + 5S (16k)", "c2-42": "6S + 5 X 1.5U C/2 MIN S + 5S (19k)",
-    "lun-42": "12S", "mar-42": "28S", "jue-42": "22S", "vie-42": "14S", "dom-42": "26S",
+    "d1-42": "12S", "d2-42": "28S", "d4-42": "22S", "d5-42": "14S", "d7-42": "26S",
     "c1-21": "3S + 4 X 1000 I C/3 MIN TR + 3S (10k)", "c2-21": "3S + 3 X 1.5U C/2 MIN S + 3S (11k)",
-    "lun-21": "8S", "mar-21": "16S", "jue-21": "", "vie-21": "10S", "dom-21": "18S",
+    "d1-21": "8S", "d2-21": "16S", "d4-21": "", "d5-21": "10S", "d7-21": "18S",
     "c1-10": "3S + 5 X 1000 I C/3 MIN TR + 3S (11k)", "c2-10": "3S + 3 X 1.5U C/2 MIN S + 3S (11k)",
-    "lun-10": "8S", "mar-10": "14S", "jue-10": "", "vie-10": "10S", "dom-10": "16S",
+    "d1-10": "8S", "d2-10": "14S", "d4-10": "", "d5-10": "10S", "d7-10": "16S",
     "pre1": "3S + 4 X 1000 I C/3 MIN TR + 3S (10k)", "pre2": "3S + 3 X 1.5U C/2 MIN S + 3S (11k)",
-    "lun-pre": "8S", "mar-pre": "16S", "jue-pre": "", "vie-pre": "10S", "dom-pre": "18S",
+    "d1-pre": "8S", "d2-pre": "16S", "d4-pre": "", "d5-pre": "10S", "d7-pre": "18S",
     "km-pre": "73k", "km-42": "137k", "km-21": "73k", "km-10": "70k",
   },
   s8: {
     phase: "TQ",
     "c1-42": "6S + 6 X 1000 I C/3 MIN TR + 5S (17k)", "c2-42": "30S + 6 A/D + 2S (34k)",
-    "lun-42": "12S", "mar-42": "28S", "jue-42": "22S", "vie-42": "14S", "dom-42": "26S",
+    "d1-42": "12S", "d2-42": "28S", "d4-42": "22S", "d5-42": "14S", "d7-42": "26S",
     "c1-21": "3S + 5 X 1000 I C/3 MIN TR + 3S (11k)", "c2-21": "3S + 4 X 1.5U C/2 MIN S + 3S (12k)",
-    "lun-21": "8S", "mar-21": "18S", "jue-21": "", "vie-21": "12S", "dom-21": "20S",
+    "d1-21": "8S", "d2-21": "18S", "d4-21": "", "d5-21": "12S", "d7-21": "20S",
     "c1-10": "3S + 5 X 1000 I C/3 MIN TR + 3S (11k)", "c2-10": "3S + 4 X 1.5U C/2 MIN S + 3S (12k)",
-    "lun-10": "8S", "mar-10": "14S", "jue-10": "", "vie-10": "10S", "dom-10": "18S",
+    "d1-10": "8S", "d2-10": "14S", "d4-10": "", "d5-10": "10S", "d7-10": "18S",
     "pre1": "3S + 5 X 1000 I C/3 MIN TR + 3S (11k)", "pre2": "3S + 4 X 1.5U C/2 MIN S + 3S (12k)",
-    "lun-pre": "8S", "mar-pre": "18S", "jue-pre": "", "vie-pre": "12S", "dom-pre": "20S",
+    "d1-pre": "8S", "d2-pre": "18S", "d4-pre": "", "d5-pre": "12S", "d7-pre": "20S",
     "km-pre": "81k", "km-42": "153k", "km-21": "81k", "km-10": "73k",
   },
   s9: {
     phase: "TQ",
     "c1-42": "5S + 5 X 1200 I C/3 MIN TR + 5S (16k)", "c2-42": "6S + 4 X 2U C/2 MIN S + 6S (20k)",
-    "lun-42": "12S", "mar-42": "28S", "jue-42": "22S", "vie-42": "14S", "dom-42": "26S",
+    "d1-42": "12S", "d2-42": "28S", "d4-42": "22S", "d5-42": "14S", "d7-42": "26S",
     "c1-21": "3S + 4 X 1200 I C/3 MIN TR + 3S (11k)", "c2-21": "3S + 3 X 2U C/2 MIN S + 3S (12k)",
-    "lun-21": "8S", "mar-21": "18S", "jue-21": "", "vie-21": "10S", "dom-21": "20S",
+    "d1-21": "8S", "d2-21": "18S", "d4-21": "", "d5-21": "10S", "d7-21": "20S",
     "c1-10": "3S + 4 X 1200 I C/3 MIN TR + 3S (11k)", "c2-10": "3S + 3 X 2U C/2 MIN S + 3S (12k)",
-    "lun-10": "8S", "mar-10": "14S", "jue-10": "", "vie-10": "10S", "dom-10": "18S",
+    "d1-10": "8S", "d2-10": "14S", "d4-10": "", "d5-10": "10S", "d7-10": "18S",
     "pre1": "3S + 4 X 1200 I C/3 MIN TR + 3S (11k)", "pre2": "3S + 3 X 2U C/2 MIN S + 3S (12k)",
-    "lun-pre": "8S", "mar-pre": "18S", "jue-pre": "", "vie-pre": "10S", "dom-pre": "20S",
+    "d1-pre": "8S", "d2-pre": "18S", "d4-pre": "", "d5-pre": "10S", "d7-pre": "20S",
     "km-pre": "79k", "km-42": "138k", "km-21": "79k", "km-10": "73k",
   },
   s10: {
     phase: "FQ",
     "c1-42": "3S + 16M + 3S (22k)", "c2-42": "4S + 5 X 2U C/2 MIN S + 4S (18k)",
-    "lun-42": "14S", "mar-42": "26S", "jue-42": "22S", "vie-42": "14S", "dom-42": "24S",
+    "d1-42": "14S", "d2-42": "26S", "d4-42": "22S", "d5-42": "14S", "d7-42": "24S",
     "c1-21": "3S + 4 X 1.5U C/2 MIN S + 3S (12k)", "c2-21": "16S + 6 A/D + 2S (19k)",
-    "lun-21": "8S", "mar-21": "16S", "jue-21": "", "vie-21": "10S", "dom-21": "18S",
+    "d1-21": "8S", "d2-21": "16S", "d4-21": "", "d5-21": "10S", "d7-21": "18S",
     "c1-10": "3S + 5 X 1000 I C/3 MIN TR + 3S (11k)", "c2-10": "4S + 4U + 4S (12k)",
-    "lun-10": "8S", "mar-10": "14S", "jue-10": "", "vie-10": "8S", "dom-10": "16S",
+    "d1-10": "8S", "d2-10": "14S", "d4-10": "", "d5-10": "8S", "d7-10": "16S",
     "pre1": "3S + 4 X 1.5U C/2 MIN S + 3S (12k)", "pre2": "16S + 6 A/D + 2S (19k)",
-    "lun-pre": "8S", "mar-pre": "16S", "jue-pre": "", "vie-pre": "10S", "dom-pre": "18S",
+    "d1-pre": "8S", "d2-pre": "16S", "d4-pre": "", "d5-pre": "10S", "d7-pre": "18S",
     "km-pre": "83k", "km-42": "140k", "km-21": "83k", "km-10": "69k",
   },
   s11: {
     phase: "FQ",
     "c1-42": "4S + 22M + 2S (28k)", "c2-42": "4S + 4 X 1.5U C/2 MIN S + 4S (14k)",
-    "lun-42": "14S", "mar-42": "24S", "jue-42": "20S", "vie-42": "12S", "dom-42": "22S",
+    "d1-42": "14S", "d2-42": "24S", "d4-42": "20S", "d5-42": "12S", "d7-42": "22S",
     "c1-21": "4S + 7U + 4S (15k)", "c2-21": "14S (14k)",
-    "lun-21": "8S", "mar-21": "14S", "jue-21": "", "vie-21": "8S", "dom-21": "16S",
+    "d1-21": "8S", "d2-21": "14S", "d4-21": "", "d5-21": "8S", "d7-21": "16S",
     "c1-10": "3S + 4 X 1200 I C/3 MIN TR + 3S (11k)", "c2-10": "4S + 5U + 3S (12k)",
-    "lun-10": "8S", "mar-10": "12S", "jue-10": "", "vie-10": "8S", "dom-10": "14S",
+    "d1-10": "8S", "d2-10": "12S", "d4-10": "", "d5-10": "8S", "d7-10": "14S",
     "pre1": "4S + 7U + 4S (15k)", "pre2": "14S (14k)",
-    "lun-pre": "8S", "mar-pre": "14S", "jue-pre": "", "vie-pre": "8S", "dom-pre": "16S",
+    "d1-pre": "8S", "d2-pre": "14S", "d4-pre": "", "d5-pre": "8S", "d7-pre": "16S",
     "km-pre": "75k", "km-42": "134k", "km-21": "75k", "km-10": "65k",
   },
   s12: {
     phase: "TAPER",
     "c1-42": "3S + 4 X 1000 M C/2 MIN S + 3S (10k)", "c2-42": "6S (6k)",
-    "lun-42": "8S", "mar-42": "10S", "jue-42": "8S", "vie-42": "", "dom-42": "",
+    "d1-42": "8S", "d2-42": "10S", "d4-42": "8S", "d5-42": "", "d7-42": "",
     "c1-21": "3S + 4 X 1000 M C/2 MIN S + 3S (10k)", "c2-21": "5S (5k)",
-    "lun-21": "6S", "mar-21": "8S", "jue-21": "", "vie-21": "", "dom-21": "",
+    "d1-21": "6S", "d2-21": "8S", "d4-21": "", "d5-21": "", "d7-21": "",
     "c1-10": "3S + 5 X 600 I C/2 MIN TR + 3S (9k)", "c2-10": "4S + 5 A/D + 1S (5k)",
-    "lun-10": "6S", "mar-10": "8S", "jue-10": "", "vie-10": "", "dom-10": "",
+    "d1-10": "6S", "d2-10": "8S", "d4-10": "", "d5-10": "", "d7-10": "",
     "pre1": "3S + 4 X 1000 M C/2 MIN S + 3S (10k)", "pre2": "5S (5k)",
-    "lun-pre": "6S", "mar-pre": "8S", "jue-pre": "", "vie-pre": "", "dom-pre": "",
+    "d1-pre": "6S", "d2-pre": "8S", "d4-pre": "", "d5-pre": "", "d7-pre": "",
     "km-pre": "29k", "km-42": "42k", "km-21": "29k", "km-10": "28k",
   },
 };
@@ -262,10 +262,11 @@ const I18N = {
   en: {
     htmlLang: "en",
     title: "vtrain — Jack Daniels Training Plans",
-    subtitle: '12-week training plans following <a href="https://en.wikipedia.org/wiki/Jack_Daniels_(coach)" target="_blank" rel="noopener">Jack Daniels\' VDOT methodology</a>. Race must be on a Sunday.',
+    heroTitle: "Build your training plan",
+    subtitle: '12-week plans following <a href="https://en.wikipedia.org/wiki/Jack_Daniels_(coach)" target="_blank" rel="noopener">Jack Daniels\' VDOT methodology</a>. Adapts to any race weekday.',
     labelDistance: "Distance",
-    labelRaceDate: "Race date (Sunday)",
-    labelTargetTime: "Goal time (hh:mm:ss)",
+    labelRaceDate: "Race date",
+    labelTargetTime: "Goal time",
     submit: "Generate plan",
     distances: {
       42: "Marathon (42 km)",
@@ -273,10 +274,13 @@ const I18N = {
       10: "10 km",
       0:  "General training",
     },
+    distancesShort: { 42: "Marathon", 21: "Half", 10: "10K", 0: "General" },
     week: "Week",
+    weeksRange: "Weeks",
     rest: "Rest",
-    raceDay: "Race day!!",
+    raceDay: "Race day",
     kms: "Total",
+    mileageHeading: "Weekly mileage",
     pacesHeading: "Training paces (min/km)",
     paces: {
       Easy: "Easy",
@@ -285,10 +289,21 @@ const I18N = {
       Interval: "Interval",
       Repetition: "Repetition",
     },
+    paceDescriptions: {
+      Easy:       "Recovery & base — most miles here. 60–79% HRmax.",
+      Marathon:   "Marathon goal pace. 80–85% HRmax.",
+      Threshold:  "Comfortably hard. 82–88% HRmax. Cap ≈10% weekly km.",
+      Interval:   "VO2max work. 97–100% HRmax. Reps ≤ ~5 min.",
+      Repetition: "Speed & economy. Short, fast, full recovery.",
+    },
     accelDecel: 'Acceleration/Deceleration: 30"/50"',
     days: {
       mon: "Monday", tue: "Tuesday", wed: "Wednesday",
       thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday",
+    },
+    daysShort: {
+      mon: "Mon", tue: "Tue", wed: "Wed",
+      thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun",
     },
     phases: {
       FI:    "Phase I (Foundation)",
@@ -297,17 +312,25 @@ const I18N = {
       FQ:    "Phase IV (Final Quality)",
       TAPER: "Phase IV (Taper / Race week)",
     },
-    errSunday: "Race date must be a Sunday. The plan assumes Q1 Wednesday, Q2 Saturday, race Sunday.",
+    phaseShort: {
+      FI: "Foundation",
+      EQ: "Early Quality",
+      TQ: "Transition Quality",
+      FQ: "Final Quality",
+    },
+    dayTypes: { q1: "Q1", q2: "Q2", long: "Long", race: "Race" },
+    errDate: "Invalid race date.",
     errDistance: "Invalid distance. Must be 10, 21, 42, or 0 for general training.",
     errTime: "Invalid goal-time format. Must be hh:mm:ss.",
   },
   es: {
     htmlLang: "es",
     title: "vtrain — Planes de entrenamiento Jack Daniels",
-    subtitle: 'Planes de entrenamiento de 12 semanas siguiendo la metodología de <a href="https://en.wikipedia.org/wiki/Jack_Daniels_(coach)" target="_blank" rel="noopener">Jack Daniels (VDOT)</a>. La carrera debe ser un domingo.',
+    heroTitle: "Crea tu plan de entrenamiento",
+    subtitle: 'Planes de 12 semanas siguiendo la metodología de <a href="https://en.wikipedia.org/wiki/Jack_Daniels_(coach)" target="_blank" rel="noopener">Jack Daniels (VDOT)</a>. Se adapta al día de tu carrera.',
     labelDistance: "Distancia",
-    labelRaceDate: "Fecha de la carrera (domingo)",
-    labelTargetTime: "Tiempo objetivo (hh:mm:ss)",
+    labelRaceDate: "Fecha de la carrera",
+    labelTargetTime: "Tiempo objetivo",
     submit: "Generar plan",
     distances: {
       42: "Maratón (42 km)",
@@ -315,10 +338,13 @@ const I18N = {
       10: "10 km",
       0:  "Entrenamiento general",
     },
+    distancesShort: { 42: "Maratón", 21: "Media", 10: "10K", 0: "General" },
     week: "Semana",
+    weeksRange: "Semanas",
     rest: "Descanso",
-    raceDay: "¡¡Día de la carrera!!",
+    raceDay: "Día de la carrera",
     kms: "Total",
+    mileageHeading: "Kilometraje semanal",
     pacesHeading: "Ritmos de entrenamiento (min/km)",
     paces: {
       Easy: "Suave",
@@ -327,10 +353,21 @@ const I18N = {
       Interval: "Intervalo",
       Repetition: "Repetición",
     },
+    paceDescriptions: {
+      Easy:       "Recuperación y base — la mayoría de kms. 60–79% FCmax.",
+      Marathon:   "Ritmo objetivo de maratón. 80–85% FCmax.",
+      Threshold:  "Cómodamente exigente. 82–88% FCmax. Tope ≈10% del km semanal.",
+      Interval:   "Trabajo VO2max. 97–100% FCmax. Reps ≤ ~5 min.",
+      Repetition: "Velocidad y economía. Corto, rápido, recuperación completa.",
+    },
     accelDecel: 'Aceleración/Desaceleración: 30"/50"',
     days: {
       mon: "Lunes", tue: "Martes", wed: "Miércoles",
       thu: "Jueves", fri: "Viernes", sat: "Sábado", sun: "Domingo",
+    },
+    daysShort: {
+      mon: "Lun", tue: "Mar", wed: "Mié",
+      thu: "Jue", fri: "Vie", sat: "Sáb", sun: "Dom",
     },
     phases: {
       FI:    "Fase I (Fundamentos)",
@@ -339,7 +376,14 @@ const I18N = {
       FQ:    "Fase IV (Calidad final)",
       TAPER: "Fase IV (Taper / semana de carrera)",
     },
-    errSunday: "La fecha de la carrera debe ser un domingo. El plan asume Q1 miércoles, Q2 sábado y carrera el domingo.",
+    phaseShort: {
+      FI: "Fundamentos",
+      EQ: "Calidad temprana",
+      TQ: "Calidad de transición",
+      FQ: "Calidad final",
+    },
+    dayTypes: { q1: "Q1", q2: "Q2", long: "Largo", race: "Carrera" },
+    errDate: "Fecha de la carrera inválida.",
     errDistance: "Distancia inválida. Debe ser 10, 21, 42 o 0 para entrenamiento general.",
     errTime: "Formato de tiempo objetivo inválido. Debe ser hh:mm:ss.",
   },
@@ -405,6 +449,13 @@ function calculatePaces(vdot) {
   };
 }
 
+// Resolve a week's per-distance fields into position-indexed slots.
+// The schedule rhythm is anchored to race day, not to weekday:
+//   d1, d2 = recovery / medium-easy days after the long run
+//   c1     = day 3 — Q1 quality session
+//   d4, d5 = easy days
+//   c2     = day 6 — Q2 quality session
+//   d7     = day 7 — long run (or race in week 12)
 function selectWeek(weekCfg, distance) {
   const suffix = distance === 0 ? "pre" : String(distance);
   const c1Key = distance === 0 ? "pre1" : `c1-${suffix}`;
@@ -412,13 +463,13 @@ function selectWeek(weekCfg, distance) {
   const kmKey = distance === 0 ? "km-pre" : `km-${suffix}`;
   return {
     phase: weekCfg.phase,
-    lun: weekCfg[`lun-${suffix}`] ?? "",
-    mar: weekCfg[`mar-${suffix}`] ?? "",
-    mie: weekCfg[c1Key],
-    jue: weekCfg[`jue-${suffix}`] ?? "",
-    vie: weekCfg[`vie-${suffix}`] ?? "",
-    sab: weekCfg[c2Key],
-    dom: weekCfg[`dom-${suffix}`] ?? "",
+    d1: weekCfg[`d1-${suffix}`] ?? "",
+    d2: weekCfg[`d2-${suffix}`] ?? "",
+    q1: weekCfg[c1Key],
+    d4: weekCfg[`d4-${suffix}`] ?? "",
+    d5: weekCfg[`d5-${suffix}`] ?? "",
+    q2: weekCfg[c2Key],
+    d7: weekCfg[`d7-${suffix}`] ?? "",
     km: weekCfg[kmKey] ?? "",
   };
 }
@@ -443,8 +494,10 @@ function addDays(date, days) {
   return out;
 }
 
-function isSunday(dateStr) {
-  return parseLocalDate(dateStr).getDay() === 0;
+// Map JS getDay() (0=Sunday..6=Saturday) to the I18N day-key.
+const DAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+function dayKey(date) {
+  return DAY_KEYS[date.getDay()];
 }
 
 // ---------- Plan generation ----------
@@ -461,24 +514,27 @@ function buildPlan(distance, raceDate, raceTime) {
     const days = selectWeek(cfg, distance);
     const dateAt = (offset) => formatDate(addDays(startDate, (week - 1) * 7 + offset));
 
-    weeks.push({
-      week,
-      phase: days.phase,
-      schedule: [
-        { day: "mon", date: dateAt(1), value: days.lun, type: "easy" },
-        { day: "tue", date: dateAt(2), value: days.mar, type: "easy" },
-        { day: "wed", date: dateAt(3), value: days.mie, type: "quality" },
-        { day: "thu", date: dateAt(4), value: days.jue, type: "easy" },
-        { day: "fri", date: dateAt(5), value: days.vie, type: "easy" },
-        { day: "sat", date: dateAt(6), value: days.sab, type: "quality" },
-        week === 12
-          ? { day: "sun", date: dateAt(7), value: null, type: "race" }
-          : { day: "sun", date: dateAt(7), value: days.dom, type: "easy" },
-      ],
-      km: days.km,
+    // Position-anchored schedule: offset 7 = race-equivalent day; weekday
+    // labels are computed from the actual date so the plan adapts to any
+    // race weekday.
+    const slots = [
+      { offset: 1, value: days.d1, type: "easy" },
+      { offset: 2, value: days.d2, type: "easy" },
+      { offset: 3, value: days.q1, type: "q1" },
+      { offset: 4, value: days.d4, type: "easy" },
+      { offset: 5, value: days.d5, type: "easy" },
+      { offset: 6, value: days.q2, type: "q2" },
+      week === 12
+        ? { offset: 7, value: null, type: "race" }
+        : { offset: 7, value: days.d7, type: "long" },
+    ];
+    const schedule = slots.map((s) => {
+      const date = addDays(startDate, (week - 1) * 7 + s.offset);
+      return { day: dayKey(date), date: formatDate(date), value: s.value, type: s.type };
     });
+    weeks.push({ week, phase: days.phase, schedule, km: days.km });
   }
-  return { weeks, vdot, paces };
+  return { weeks, vdot, paces, distance: distanceInt, raceDate, raceTime };
 }
 
 // ---------- Render ----------
@@ -488,52 +544,137 @@ function renderError(msg) {
   out.innerHTML = `<div class="error">${msg}</div>`;
 }
 
+function renderHeroStats(plan, t) {
+  const paces = Object.entries(plan.paces).map(([k, v]) => `
+    <div class="pace-card pace-${k.toLowerCase()}">
+      <div class="pace-name">${t.paces[k]}</div>
+      <div class="pace-value">${v}</div>
+      <div class="pace-desc">${t.paceDescriptions[k]}</div>
+    </div>
+  `).join("");
+  const meta = `${t.distancesShort[plan.distance]} · ${plan.raceTime}`;
+  return `
+    <div class="vdot-hero">
+      <div class="vdot-block">
+        <div class="vdot-label">VDOT</div>
+        <div class="vdot-value">${plan.vdot}</div>
+        <div class="vdot-meta">${meta}</div>
+      </div>
+      <div class="paces-grid">${paces}</div>
+    </div>
+  `;
+}
+
+function renderPhaseStrip(t) {
+  const segments = [
+    { key: "FI", weeks: "1–3" },
+    { key: "EQ", weeks: "4–6" },
+    { key: "TQ", weeks: "7–9" },
+    { key: "FQ", weeks: "10–12" },
+  ];
+  return `
+    <div class="phase-strip">
+      ${segments.map(s => `
+        <div class="phase-segment phase-${s.key}">
+          <div class="phase-segment-name">${t.phaseShort[s.key]}</div>
+          <div class="phase-segment-weeks">${t.weeksRange} ${s.weeks}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderMileageChart(plan, t) {
+  const kms = plan.weeks.map(w => parseInt(w.km, 10) || 0);
+  const max = Math.max(...kms, 1);
+  const W = 600, H = 110, BAR_W = 36, GAP = 8;
+  const startX = (W - 12 * BAR_W - 11 * GAP) / 2;
+  const chartTop = 22, chartBottom = H - 16;
+  const chartH = chartBottom - chartTop;
+
+  const bars = plan.weeks.map((w, i) => {
+    const km = kms[i];
+    const h = Math.max(2, (km / max) * chartH);
+    const x = startX + i * (BAR_W + GAP);
+    const y = chartBottom - h;
+    return `
+      <g class="bar-group" data-phase="${w.phase}">
+        <rect x="${x}" y="${y}" width="${BAR_W}" height="${h}" rx="3"/>
+        <text x="${x + BAR_W/2}" y="${y - 5}" class="bar-value">${km}</text>
+        <text x="${x + BAR_W/2}" y="${H - 3}" class="bar-label">${i + 1}</text>
+      </g>
+    `;
+  }).join("");
+
+  return `
+    <div class="mileage-chart">
+      <h3 class="chart-title">${t.mileageHeading}</h3>
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${t.mileageHeading}">
+        ${bars}
+      </svg>
+    </div>
+  `;
+}
+
+function renderWeekCard(w, t, lang, idx) {
+  const rows = w.schedule.map((d) => {
+    let display, badge = "";
+    let valueCls = "day-value";
+    if (d.type === "race") {
+      display = t.raceDay;
+      badge = `<span class="day-badge badge-race">${t.dayTypes.race}</span>`;
+    } else if (!d.value) {
+      display = t.rest;
+      valueCls += " is-rest";
+    } else {
+      display = translateWorkout(d.value, lang);
+      if (d.type === "q1") badge = `<span class="day-badge badge-quality">${t.dayTypes.q1}</span>`;
+      else if (d.type === "q2") badge = `<span class="day-badge badge-quality">${t.dayTypes.q2}</span>`;
+      else if (d.type === "long") badge = `<span class="day-badge badge-long">${t.dayTypes.long}</span>`;
+    }
+    return `
+      <li class="day-row day-${d.type}">
+        <span class="day-label">
+          <span class="day-name">${t.daysShort[d.day]}</span>
+          <span class="day-date">${d.date}</span>
+        </span>
+        <span class="day-tag">${badge}</span>
+        <span class="${valueCls}">${display}</span>
+      </li>
+    `;
+  }).join("");
+
+  return `
+    <article class="week-card phase-${w.phase}" style="--i: ${idx}">
+      <header class="week-header">
+        <div class="week-title">
+          <span class="week-num">${t.week} ${w.week}</span>
+          <span class="week-phase">${t.phases[w.phase]}</span>
+        </div>
+        <div class="week-km">${w.km}</div>
+      </header>
+      <ul class="day-list">${rows}</ul>
+    </article>
+  `;
+}
+
 function renderPlan(plan, lang) {
   const t = I18N[lang];
   const out = document.getElementById("output");
-  const weeksHTML = plan.weeks.map((w) => {
-    const items = w.schedule.map((d) => {
-      const dayName = t.days[d.day].padEnd(10);
-      let display, cls;
-      if (d.type === "race") {
-        display = t.raceDay; cls = "q";
-      } else if (!d.value) {
-        display = t.rest; cls = "rest";
-      } else {
-        display = translateWorkout(d.value, lang);
-        cls = d.type === "quality" ? "q" : "";
-      }
-      return `<li class="${cls}">${dayName}(${d.date}): ${display}</li>`;
-    }).join("");
-    return `
-      <section class="week">
-        <h3>${t.week} ${w.week} — ${t.phases[w.phase]}</h3>
-        <ul>${items}</ul>
-        <p class="km">${t.kms}: ${w.km}</p>
-      </section>`;
-  }).join("");
-
-  const paceRows = Object.entries(plan.paces).map(([k, v]) =>
-    `<dt>${t.paces[k]}</dt><dd>${v}</dd>`).join("");
-
   out.innerHTML = `
-    ${weeksHTML}
-    <section class="paces">
-      <h3>VDOT ${plan.vdot} — ${t.pacesHeading}</h3>
-      <dl>
-        ${paceRows}
-        <dt>A/D</dt><dd>${t.accelDecel}</dd>
-      </dl>
-    </section>
+    ${renderHeroStats(plan, t)}
+    ${renderPhaseStrip(t)}
+    ${renderMileageChart(plan, t)}
+    <div class="weeks-list">
+      ${plan.weeks.map((w, i) => renderWeekCard(w, t, lang, i)).join("")}
+    </div>
   `;
 }
 
 // ---------- Form wiring ----------
 
 function defaultRaceDate() {
-  const d = addDays(new Date(), 84);
-  const offset = (7 - d.getDay()) % 7;
-  return formatDate(addDays(d, offset));
+  return formatDate(addDays(new Date(), 84));
 }
 
 const LANG_STORAGE_KEY = "vtrain.lang";
@@ -553,11 +694,18 @@ function applyStaticI18n(lang) {
   for (const el of document.querySelectorAll("[data-i18n]")) {
     el.innerHTML = t[el.dataset.i18n];
   }
-  for (const opt of document.getElementById("distancia").options) {
-    opt.textContent = t.distances[opt.value];
+  for (const el of document.querySelectorAll("[data-distance-label]")) {
+    el.textContent = t.distancesShort[el.dataset.distanceLabel];
   }
   for (const btn of document.querySelectorAll(".lang-toggle button")) {
     btn.classList.toggle("active", btn.dataset.lang === lang);
+  }
+}
+
+function updateDistanceCards() {
+  for (const card of document.querySelectorAll(".distance-card")) {
+    const checked = card.querySelector("input")?.checked;
+    card.classList.toggle("is-selected", !!checked);
   }
 }
 
@@ -572,19 +720,24 @@ function setLanguage(lang) {
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(pickInitialLang());
   document.getElementById("fechaCarrera").value = defaultRaceDate();
+  updateDistanceCards();
 
   for (const btn of document.querySelectorAll(".lang-toggle button")) {
     btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+  }
+  for (const radio of document.querySelectorAll('input[name="distancia"]')) {
+    radio.addEventListener("change", updateDistanceCards);
   }
 
   document.getElementById("plan-form").addEventListener("submit", (e) => {
     e.preventDefault();
     const t = I18N[currentLang];
-    const distance = Number(document.getElementById("distancia").value);
+    const checked = document.querySelector('input[name="distancia"]:checked');
+    const distance = checked ? Number(checked.value) : NaN;
     const raceDate = document.getElementById("fechaCarrera").value;
     const raceTime = document.getElementById("tiempoObjetivo").value;
 
-    if (!isSunday(raceDate)) { renderError(t.errSunday); return; }
+    if (!raceDate || isNaN(parseLocalDate(raceDate).getTime())) { renderError(t.errDate); return; }
     if (![0, 10, 21, 42].includes(distance)) { renderError(t.errDistance); return; }
     const seconds = parseTimeToSeconds(raceTime);
     if (!Number.isFinite(seconds) || seconds <= 0) { renderError(t.errTime); return; }
