@@ -319,6 +319,9 @@ const I18N = {
       FQ: "Final Quality",
     },
     dayTypes: { q1: "Q1", q2: "Q2", long: "Long", race: "Race" },
+    actionICS: "Download .ics",
+    actionPrint: "Print / PDF",
+    actionHint: "Import the .ics file in Google Calendar (Settings → Import) or open it in Apple Calendar.",
     errDate: "Invalid race date.",
     errDistance: "Invalid distance. Must be 10, 21, 42, or 0 for general training.",
     errTime: "Invalid goal-time format. Must be hh:mm:ss.",
@@ -383,6 +386,9 @@ const I18N = {
       FQ: "Calidad final",
     },
     dayTypes: { q1: "Q1", q2: "Q2", long: "Largo", race: "Carrera" },
+    actionICS: "Descargar .ics",
+    actionPrint: "Imprimir / PDF",
+    actionHint: "Importa el archivo .ics en Google Calendar (Ajustes → Importar) o ábrelo en Calendario de Apple.",
     errDate: "Fecha de la carrera inválida.",
     errDistance: "Distancia inválida. Debe ser 10, 21, 42 o 0 para entrenamiento general.",
     errTime: "Formato de tiempo objetivo inválido. Debe ser hh:mm:ss.",
@@ -534,7 +540,7 @@ function buildPlan(distance, raceDate, raceTime) {
     });
     weeks.push({ week, phase: days.phase, schedule, km: days.km });
   }
-  return { weeks, vdot, paces, distance: distanceInt, raceDate, raceTime };
+  return { weeks, vdot, paces, distance, raceDate, raceTime };
 }
 
 // ---------- Render ----------
@@ -658,10 +664,35 @@ function renderWeekCard(w, t, lang, idx) {
   `;
 }
 
+function renderPlanActions(t) {
+  return `
+    <div class="plan-actions">
+      <button type="button" class="action-btn" data-action="ics" title="${t.actionHint}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8"  y1="2" x2="8"  y2="6"/>
+          <line x1="3"  y1="10" x2="21" y2="10"/>
+        </svg>
+        <span>${t.actionICS}</span>
+      </button>
+      <button type="button" class="action-btn" data-action="print">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        <span>${t.actionPrint}</span>
+      </button>
+    </div>
+  `;
+}
+
 function renderPlan(plan, lang) {
   const t = I18N[lang];
   const out = document.getElementById("output");
   out.innerHTML = `
+    ${renderPlanActions(t)}
     ${renderHeroStats(plan, t)}
     ${renderPhaseStrip(t)}
     ${renderMileageChart(plan, t)}
@@ -669,6 +700,89 @@ function renderPlan(plan, lang) {
       ${plan.weeks.map((w, i) => renderWeekCard(w, t, lang, i)).join("")}
     </div>
   `;
+}
+
+// ---------- Export: iCalendar (.ics) ----------
+
+function escapeICS(text) {
+  return String(text)
+    .replace(/\\/g, "\\\\")
+    .replace(/\r?\n/g, "\\n")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,");
+}
+
+function dateToICS(dateStr) {
+  return dateStr.replace(/-/g, "");
+}
+
+function buildICS(plan, lang) {
+  const t = I18N[lang];
+  const stamp = new Date().toISOString().replace(/[-:]|\.\d+/g, "").slice(0, 15) + "Z";
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//vtrain//Daniels Training Plan//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    `X-WR-CALNAME:${escapeICS(`vtrain · ${t.distancesShort[plan.distance]} · ${plan.raceDate}`)}`,
+  ];
+
+  for (const w of plan.weeks) {
+    for (const d of w.schedule) {
+      let summary, description;
+      const dayName = t.days[d.day];
+      const phaseLabel = t.phases[w.phase];
+      const tag = d.type === "q1" ? `[${t.dayTypes.q1}] `
+                : d.type === "q2" ? `[${t.dayTypes.q2}] `
+                : d.type === "long" ? `[${t.dayTypes.long}] ` : "";
+
+      if (d.type === "race") {
+        summary = `${t.raceDay} · ${t.distancesShort[plan.distance]} (${plan.raceTime})`;
+        description = `${phaseLabel}\n${t.week} ${w.week} · ${dayName}`;
+      } else if (!d.value) {
+        summary = t.rest;
+        description = `${phaseLabel}\n${t.week} ${w.week} · ${dayName}`;
+      } else {
+        const workout = translateWorkout(d.value, lang);
+        summary = `${tag}${workout}`;
+        description = `${phaseLabel}\n${t.week} ${w.week} · ${dayName}\n${workout}`;
+      }
+
+      const dt = dateToICS(d.date);
+      const nextDay = dateToICS(formatDate(addDays(parseLocalDate(d.date), 1)));
+      const uid = `vtrain-w${w.week}-${d.day}-${dt}@vtrain.jandroav.net`;
+
+      lines.push(
+        "BEGIN:VEVENT",
+        `UID:${uid}`,
+        `DTSTAMP:${stamp}`,
+        `DTSTART;VALUE=DATE:${dt}`,
+        `DTEND;VALUE=DATE:${nextDay}`,
+        `SUMMARY:${escapeICS(summary)}`,
+        `DESCRIPTION:${escapeICS(description)}`,
+        "TRANSP:TRANSPARENT",
+        "END:VEVENT",
+      );
+    }
+  }
+  lines.push("END:VCALENDAR");
+  // ICS spec wants CRLF line endings.
+  return lines.join("\r\n") + "\r\n";
+}
+
+function downloadICS(plan, lang) {
+  const ics = buildICS(plan, lang);
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const distSlug = plan.distance === 0 ? "general" : `${plan.distance}k`;
+  a.href = url;
+  a.download = `vtrain-${distSlug}-${plan.raceDate}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // ---------- Form wiring ----------
@@ -728,6 +842,14 @@ document.addEventListener("DOMContentLoaded", () => {
   for (const radio of document.querySelectorAll('input[name="distancia"]')) {
     radio.addEventListener("change", updateDistanceCards);
   }
+
+  // Delegated handler for export actions (buttons live inside renderPlan output)
+  document.getElementById("output").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-action]");
+    if (!btn || !currentPlan) return;
+    if (btn.dataset.action === "ics") downloadICS(currentPlan, currentLang);
+    else if (btn.dataset.action === "print") window.print();
+  });
 
   document.getElementById("plan-form").addEventListener("submit", (e) => {
     e.preventDefault();

@@ -285,6 +285,43 @@
     }
     .plan-output:empty { display: none; }
 
+    /* Plan action toolbar */
+    .plan-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 0.85rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--fg-muted);
+      font-family: inherit;
+      font-size: 0.83rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+    }
+    .action-btn:hover {
+      color: var(--fg);
+      background: var(--bg-hover);
+      border-color: var(--border-strong);
+    }
+    .action-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .action-btn svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
     .error {
       background: rgba(239, 68, 68, 0.1);
       border: 1px solid rgba(239, 68, 68, 0.35);
@@ -614,6 +651,102 @@
       .day-label { grid-column: 1; grid-row: 1; }
       .day-tag   { grid-column: 2; grid-row: 1; justify-self: end; }
       .day-value { grid-column: 1 / -1; grid-row: 2; padding-left: 0.1rem; }
+    }
+
+    /* Print / PDF */
+    @media print {
+      @page { size: A4; margin: 1.4cm; }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        animation: none !important;
+        transition: none !important;
+      }
+      body {
+        background: white !important;
+        background-image: none !important;
+        color: #111 !important;
+        font-size: 10pt;
+        line-height: 1.4;
+      }
+      .page-header,
+      .intro,
+      .calculator,
+      .plan-actions,
+      .page-footer {
+        display: none !important;
+      }
+      .container { max-width: 100% !important; padding: 0 !important; }
+      .plan-output { gap: 0.45cm !important; margin: 0 !important; }
+
+      .vdot-hero,
+      .phase-strip,
+      .mileage-chart,
+      .week-card,
+      .pace-card,
+      .phase-segment {
+        background: white !important;
+        border: 1px solid #d4d4d8 !important;
+        box-shadow: none !important;
+        color: #111 !important;
+      }
+      .week-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        padding: 0.4cm 0.5cm !important;
+        opacity: 1 !important;
+      }
+      .vdot-block { border-right: 1px solid #d4d4d8 !important; }
+      .vdot-value { color: #111 !important; font-size: 30pt !important; }
+      .vdot-label { color: #ea580c !important; }
+      .vdot-meta  { color: #555 !important; }
+
+      .pace-name { color: #555 !important; }
+      .pace-value { color: #111 !important; }
+      .pace-desc  { color: #666 !important; }
+
+      .week-num   { color: #111 !important; font-size: 11pt !important; }
+      .week-phase { color: #555 !important; }
+      .week-km    { color: #ea580c !important; font-weight: 700 !important; }
+      .day-name   { color: #111 !important; }
+      .day-date   { color: #777 !important; }
+      .day-value  { color: #222 !important; }
+      .day-row + .day-row { border-top-color: #e4e4e7 !important; }
+
+      .phase-segment-name  { color: #111 !important; }
+      .phase-segment-weeks { color: #555 !important; }
+      .chart-title         { color: #555 !important; }
+
+      /* Phase accent borders */
+      .week-card.phase-FI    { border-left: 3px solid #64748b !important; }
+      .week-card.phase-EQ    { border-left: 3px solid #06b6d4 !important; }
+      .week-card.phase-TQ    { border-left: 3px solid #ea580c !important; }
+      .week-card.phase-FQ    { border-left: 3px solid #ef4444 !important; }
+      .week-card.phase-TAPER { border-left: 3px solid #d97706 !important; }
+      .phase-segment.phase-FI { border-top: 3px solid #64748b !important; }
+      .phase-segment.phase-EQ { border-top: 3px solid #06b6d4 !important; }
+      .phase-segment.phase-TQ { border-top: 3px solid #ea580c !important; }
+      .phase-segment.phase-FQ { border-top: 3px solid #ef4444 !important; }
+
+      /* Pace borders */
+      .pace-card.pace-easy       { border-left: 3px solid #16a34a !important; }
+      .pace-card.pace-marathon   { border-left: 3px solid #ea580c !important; }
+      .pace-card.pace-threshold  { border-left: 3px solid #dc2626 !important; }
+      .pace-card.pace-interval   { border-left: 3px solid #9333ea !important; }
+      .pace-card.pace-repetition { border-left: 3px solid #2563eb !important; }
+
+      /* Day-type badges */
+      .badge-quality { background: #fee2e2 !important; color: #991b1b !important; }
+      .badge-long    { background: #dbeafe !important; color: #1e40af !important; }
+      .badge-race    { background: #fef3c7 !important; color: #92400e !important; }
+
+      .bar-group[data-phase="FI"]    rect { fill: #64748b !important; }
+      .bar-group[data-phase="EQ"]    rect { fill: #06b6d4 !important; }
+      .bar-group[data-phase="TQ"]    rect { fill: #ea580c !important; }
+      .bar-group[data-phase="FQ"]    rect { fill: #ef4444 !important; }
+      .bar-group[data-phase="TAPER"] rect { fill: #d97706 !important; }
+      .bar-label { fill: #71717a !important; }
+      .bar-value { fill: #555 !important; }
     }
   </style>
 </head>
