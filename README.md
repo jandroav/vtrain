@@ -1,39 +1,28 @@
 # vtrain
 
-Utility for generating 10k, half-marathon, and marathon training plans following [Jack Daniels'](https://en.wikipedia.org/wiki/Jack_Daniels_(coach)) methods ([VDOT](https://planesmaraton.com/2018/10/20/entrenamiento-de-jack-daniels-el-parametro-vdot/)). Using his methodology I went from a 2h46 marathon (Athens) in 2019 to 2h36 in Valencia 2022 and 2h28 in Valencia 2023.
+12-week training plan generator following [Jack Daniels'](https://en.wikipedia.org/wiki/Jack_Daniels_(coach)) VDOT methodology — for 10k, half-marathon, marathon, and general training.
 
-You can find more information in [his book](https://www.amazon.com/Daniels-Running-Formula-Jack-Tupper/dp/1450431836).
+🔗 **[vtrain.jandroav.net](https://vtrain.jandroav.net)**
 
-All plans cover the 3 months leading up to the race date.
+## How it works
 
-## Examples
+Enter your distance, race date (must be a Sunday), and goal time. The app computes your VDOT and the five Daniels training paces (Easy, Marathon, Threshold, Interval, Repetition), then generates a 12-week plan structured into Daniels' four phases:
 
-Training plan for the 2024 Seville half-marathon:
+- **Phase I — Foundation** (s1–s3): easy running + strides
+- **Phase II — Early Quality** (s4–s6): repetition (R) work
+- **Phase III — Transition Quality** (s7–s9): intervals (I) + threshold (T)
+- **Phase IV — Final Quality** (s10–s12): T + race-specific pace, taper in s12
+
+Q1 lands on Wednesday and Q2 on Saturday — three days apart, per Daniels. The plan respects Daniels' volume caps (T ≤ 10%, I ≤ 8%, R ≤ 5% of weekly km) and the ~5-min ceiling on I-pace reps.
+
+More on the methodology in [Daniels' Running Formula](https://www.amazon.com/Daniels-Running-Formula-Jack-Tupper/dp/1450431836).
+
+## Development
+
+No build step — plain HTML + vanilla JS. Serve locally with:
 
 ```bash
-vtrain plan --distancia 21 --fechaCarrera 2024-01-28 --tiempoObjetivo 01:35:00
+python3 -m http.server 8000
 ```
 
-Training plan for the 2024 Valencia marathon:
-
-```bash
-vtrain plan --distancia 42 --fechaCarrera 2024-01-21 --tiempoObjetivo 02:28:00
-```
-
-Example of the last 2 weeks:
-
-![](/doc/img/sample.png)
-
-## Getting Started
-1. Install `vtrain`
-   * Download `vtrain` for your operating system [here](https://github.com/jandroav/vtrain/releases)
-   * Unzip it wherever you like
-   * If you're on Linux, run `chmod +x vtrain`
-   * Add `vtrain` to your `PATH`
-    > Note: macOS users will need to grant permissions in `System Settings` -> `Privacy & Security`.
-
-    ![](/doc/img/macOS_privacy_settings.png)
-
-![](/doc/img/vtrain.png)
-
-
+then open `http://localhost:8000`.
