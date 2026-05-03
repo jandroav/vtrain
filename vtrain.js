@@ -1,10 +1,4 @@
-// vtrain — static-site port of the Go CLI.
-//
-// IMPORTANT: the data tables and plan config below mirror
-//   pkg/plan/plan.go        (VDOT and pace tables)
-//   pkg/common/config.yaml  (12-week plan content)
-// Keep them in sync when editing either side.
-
+// vtrain — single-page training plan generator (Daniels' VDOT methodology).
 "use strict";
 
 // ---------- VDOT tables (race time per VDOT) ----------
@@ -117,7 +111,7 @@ const PACE_R = {
 
 const PLAN_CONFIG = {
   s1: {
-    phase: "Fase I (Fundamentos)",
+    phase: "FI",
     "c1-42": "8S + 8 A/D + 4S (12k)", "c2-42": "22S (22k)",
     "lun-42": "12S", "mar-42": "20S", "jue-42": "18S", "vie-42": "12S", "dom-42": "26S",
     "c1-21": "6S + 8 A/D + 2S (10k)", "c2-21": "14S (14k)",
@@ -129,7 +123,7 @@ const PLAN_CONFIG = {
     "km-pre": "65k", "km-42": "122k", "km-21": "65k", "km-10": "58k",
   },
   s2: {
-    phase: "Fase I (Fundamentos)",
+    phase: "FI",
     "c1-42": "10S + 8 A/D + 4S (14k)", "c2-42": "24S (24k)",
     "lun-42": "12S", "mar-42": "22S", "jue-42": "20S", "vie-42": "14S", "dom-42": "26S",
     "c1-21": "8S + 8 A/D + 2S (12k)", "c2-21": "16S (16k)",
@@ -141,7 +135,7 @@ const PLAN_CONFIG = {
     "km-pre": "74k", "km-42": "132k", "km-21": "74k", "km-10": "68k",
   },
   s3: {
-    phase: "Fase I (Fundamentos)",
+    phase: "FI",
     "c1-42": "10S + 10 A/D + 4S (14k)", "c2-42": "26S (26k)",
     "lun-42": "14S", "mar-42": "22S", "jue-42": "20S", "vie-42": "14S", "dom-42": "26S",
     "c1-21": "8S + 10 A/D + 2S (12k)", "c2-21": "18S (18k)",
@@ -153,7 +147,7 @@ const PLAN_CONFIG = {
     "km-pre": "80k", "km-42": "136k", "km-21": "80k", "km-10": "72k",
   },
   s4: {
-    phase: "Fase II (Calidad temprana)",
+    phase: "EQ",
     "c1-42": "3S + 8 X 200 R C/200 TR + 4S (12k)", "c2-42": "28S (28k)",
     "lun-42": "14S", "mar-42": "22S", "jue-42": "20S", "vie-42": "14S", "dom-42": "28S",
     "c1-21": "3S + 6 X 200 R C/200 TR + 3S (10k)", "c2-21": "18S (18k)",
@@ -165,7 +159,7 @@ const PLAN_CONFIG = {
     "km-pre": "80k", "km-42": "138k", "km-21": "80k", "km-10": "70k",
   },
   s5: {
-    phase: "Fase II (Calidad temprana)",
+    phase: "EQ",
     "c1-42": "3S + 6 X 400 R C/400 TR + 4S (14k)", "c2-42": "30S (30k)",
     "lun-42": "14S", "mar-42": "24S", "jue-42": "22S", "vie-42": "14S", "dom-42": "28S",
     "c1-21": "3S + 6 X 400 R C/400 TR + 3S (12k)", "c2-21": "18S (18k)",
@@ -177,7 +171,7 @@ const PLAN_CONFIG = {
     "km-pre": "84k", "km-42": "146k", "km-21": "84k", "km-10": "72k",
   },
   s6: {
-    phase: "Fase II (Calidad temprana)",
+    phase: "EQ",
     "c1-42": "4S + 8 X 400 R C/400 TR + 4S (16k)", "c2-42": "32S (32k)",
     "lun-42": "16S", "mar-42": "24S", "jue-42": "22S", "vie-42": "16S", "dom-42": "28S",
     "c1-21": "3S + 8 X 400 R C/400 TR + 3S (13k)", "c2-21": "20S (20k)",
@@ -189,7 +183,7 @@ const PLAN_CONFIG = {
     "km-pre": "89k", "km-42": "154k", "km-21": "89k", "km-10": "78k",
   },
   s7: {
-    phase: "Fase III (Calidad de transición)",
+    phase: "TQ",
     "c1-42": "6S + 5 X 1000 I C/3 MIN TR + 5S (16k)", "c2-42": "6S + 5 X 1.5U C/2 MIN S + 5S (19k)",
     "lun-42": "12S", "mar-42": "28S", "jue-42": "22S", "vie-42": "14S", "dom-42": "26S",
     "c1-21": "3S + 4 X 1000 I C/3 MIN TR + 3S (10k)", "c2-21": "3S + 3 X 1.5U C/2 MIN S + 3S (11k)",
@@ -201,7 +195,7 @@ const PLAN_CONFIG = {
     "km-pre": "73k", "km-42": "137k", "km-21": "73k", "km-10": "70k",
   },
   s8: {
-    phase: "Fase III (Calidad de transición)",
+    phase: "TQ",
     "c1-42": "6S + 6 X 1000 I C/3 MIN TR + 5S (17k)", "c2-42": "30S + 6 A/D + 2S (34k)",
     "lun-42": "12S", "mar-42": "28S", "jue-42": "22S", "vie-42": "14S", "dom-42": "26S",
     "c1-21": "3S + 5 X 1000 I C/3 MIN TR + 3S (11k)", "c2-21": "3S + 4 X 1.5U C/2 MIN S + 3S (12k)",
@@ -213,7 +207,7 @@ const PLAN_CONFIG = {
     "km-pre": "81k", "km-42": "153k", "km-21": "81k", "km-10": "73k",
   },
   s9: {
-    phase: "Fase III (Calidad de transición)",
+    phase: "TQ",
     "c1-42": "5S + 5 X 1200 I C/3 MIN TR + 5S (16k)", "c2-42": "6S + 4 X 2U C/2 MIN S + 6S (20k)",
     "lun-42": "12S", "mar-42": "28S", "jue-42": "22S", "vie-42": "14S", "dom-42": "26S",
     "c1-21": "3S + 4 X 1200 I C/3 MIN TR + 3S (11k)", "c2-21": "3S + 3 X 2U C/2 MIN S + 3S (12k)",
@@ -225,7 +219,7 @@ const PLAN_CONFIG = {
     "km-pre": "79k", "km-42": "138k", "km-21": "79k", "km-10": "73k",
   },
   s10: {
-    phase: "Fase IV (Calidad final)",
+    phase: "FQ",
     "c1-42": "3S + 16M + 3S (22k)", "c2-42": "4S + 5 X 2U C/2 MIN S + 4S (18k)",
     "lun-42": "14S", "mar-42": "26S", "jue-42": "22S", "vie-42": "14S", "dom-42": "24S",
     "c1-21": "3S + 4 X 1.5U C/2 MIN S + 3S (12k)", "c2-21": "16S + 6 A/D + 2S (19k)",
@@ -237,7 +231,7 @@ const PLAN_CONFIG = {
     "km-pre": "83k", "km-42": "140k", "km-21": "83k", "km-10": "69k",
   },
   s11: {
-    phase: "Fase IV (Calidad final)",
+    phase: "FQ",
     "c1-42": "4S + 22M + 2S (28k)", "c2-42": "4S + 4 X 1.5U C/2 MIN S + 4S (14k)",
     "lun-42": "14S", "mar-42": "24S", "jue-42": "20S", "vie-42": "12S", "dom-42": "22S",
     "c1-21": "4S + 7U + 4S (15k)", "c2-21": "14S (14k)",
@@ -249,7 +243,7 @@ const PLAN_CONFIG = {
     "km-pre": "75k", "km-42": "134k", "km-21": "75k", "km-10": "65k",
   },
   s12: {
-    phase: "Fase IV (Taper / semana de carrera)",
+    phase: "TAPER",
     "c1-42": "3S + 4 X 1000 M C/2 MIN S + 3S (10k)", "c2-42": "6S (6k)",
     "lun-42": "8S", "mar-42": "10S", "jue-42": "8S", "vie-42": "", "dom-42": "",
     "c1-21": "3S + 4 X 1000 M C/2 MIN S + 3S (10k)", "c2-21": "5S (5k)",
@@ -261,6 +255,118 @@ const PLAN_CONFIG = {
     "km-pre": "29k", "km-42": "42k", "km-21": "29k", "km-10": "28k",
   },
 };
+
+// ---------- i18n ----------
+
+const I18N = {
+  en: {
+    htmlLang: "en",
+    title: "vtrain — Jack Daniels Training Plans",
+    subtitle: '12-week training plans following <a href="https://en.wikipedia.org/wiki/Jack_Daniels_(coach)" target="_blank" rel="noopener">Jack Daniels\' VDOT methodology</a>. Race must be on a Sunday.',
+    labelDistance: "Distance",
+    labelRaceDate: "Race date (Sunday)",
+    labelTargetTime: "Goal time (hh:mm:ss)",
+    submit: "Generate plan",
+    distances: {
+      42: "Marathon (42 km)",
+      21: "Half marathon (21 km)",
+      10: "10 km",
+      0:  "General training",
+    },
+    week: "Week",
+    rest: "Rest",
+    raceDay: "Race day!!",
+    kms: "Total",
+    pacesHeading: "Training paces (min/km)",
+    paces: {
+      Easy: "Easy",
+      Marathon: "Marathon",
+      Threshold: "Threshold",
+      Interval: "Interval",
+      Repetition: "Repetition",
+    },
+    accelDecel: 'Acceleration/Deceleration: 30"/50"',
+    days: {
+      mon: "Monday", tue: "Tuesday", wed: "Wednesday",
+      thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday",
+    },
+    phases: {
+      FI:    "Phase I (Foundation)",
+      EQ:    "Phase II (Early Quality)",
+      TQ:    "Phase III (Transition Quality)",
+      FQ:    "Phase IV (Final Quality)",
+      TAPER: "Phase IV (Taper / Race week)",
+    },
+    errSunday: "Race date must be a Sunday. The plan assumes Q1 Wednesday, Q2 Saturday, race Sunday.",
+    errDistance: "Invalid distance. Must be 10, 21, 42, or 0 for general training.",
+    errTime: "Invalid goal-time format. Must be hh:mm:ss.",
+  },
+  es: {
+    htmlLang: "es",
+    title: "vtrain — Planes de entrenamiento Jack Daniels",
+    subtitle: 'Planes de entrenamiento de 12 semanas siguiendo la metodología de <a href="https://en.wikipedia.org/wiki/Jack_Daniels_(coach)" target="_blank" rel="noopener">Jack Daniels (VDOT)</a>. La carrera debe ser un domingo.',
+    labelDistance: "Distancia",
+    labelRaceDate: "Fecha de la carrera (domingo)",
+    labelTargetTime: "Tiempo objetivo (hh:mm:ss)",
+    submit: "Generar plan",
+    distances: {
+      42: "Maratón (42 km)",
+      21: "Media maratón (21 km)",
+      10: "10 km",
+      0:  "Entrenamiento general",
+    },
+    week: "Semana",
+    rest: "Descanso",
+    raceDay: "¡¡Día de la carrera!!",
+    kms: "Total",
+    pacesHeading: "Ritmos de entrenamiento (min/km)",
+    paces: {
+      Easy: "Suave",
+      Marathon: "Ritmo Maratón",
+      Threshold: "Umbral",
+      Interval: "Intervalo",
+      Repetition: "Repetición",
+    },
+    accelDecel: 'Aceleración/Desaceleración: 30"/50"',
+    days: {
+      mon: "Lunes", tue: "Martes", wed: "Miércoles",
+      thu: "Jueves", fri: "Viernes", sat: "Sábado", sun: "Domingo",
+    },
+    phases: {
+      FI:    "Fase I (Fundamentos)",
+      EQ:    "Fase II (Calidad temprana)",
+      TQ:    "Fase III (Calidad de transición)",
+      FQ:    "Fase IV (Calidad final)",
+      TAPER: "Fase IV (Taper / semana de carrera)",
+    },
+    errSunday: "La fecha de la carrera debe ser un domingo. El plan asume Q1 miércoles, Q2 sábado y carrera el domingo.",
+    errDistance: "Distancia inválida. Debe ser 10, 21, 42 o 0 para entrenamiento general.",
+    errTime: "Formato de tiempo objetivo inválido. Debe ser hh:mm:ss.",
+  },
+};
+
+// Translate a workout string from Spanish Daniels notation to English.
+// Pace codes: S→E (Easy), U→T (Threshold). M, I, R unchanged.
+// Notation: A/D→ST, C/→w/, TR→jog, MIN→min, X→x.
+function translateWorkout(text, lang) {
+  if (lang === "es") return text;
+  return text
+    // digit+S → digit+E (e.g. "8S" → "8E", "1.5S" → "1.5E")
+    .replace(/(\d(?:\.\d+)?)S(?=\b|\s|\+|\(|$)/g, "$1E")
+    // "MIN S" → "min E" (rest interval at easy pace) — must run before the standalone MIN replacement
+    .replace(/MIN\s+S\b/g, "min E")
+    .replace(/\bMIN\b/g, "min")
+    // digit (optional space) U → digit T (e.g. "1.5U", "2 U", "7U")
+    .replace(/(\d(?:\.\d+)?)\s*U\b/g, "$1T")
+    // "-> U" → "-> T"
+    .replace(/->\s*U\b/g, "-> T")
+    .replace(/A\/D/g, "ST")
+    .replace(/C\//g, "w/")
+    .replace(/\bTR\b/g, "jog")
+    .replace(/\bX\b/g, "x")
+    .replace(/KM\s+PROG/g, "km prog")
+    .replace(/\bKMS\b/g, "km");
+}
 
 // ---------- Helpers ----------
 
@@ -289,12 +395,13 @@ function getVDOT(targetSeconds, distance) {
 }
 
 function calculatePaces(vdot) {
+  const fallback = "—";
   return {
-    Suave: PACE_S[vdot] ?? "No disponible",
-    "Ritmo Maratón": PACE_M[vdot] ?? "No disponible",
-    Umbral: PACE_U[vdot] ?? "No disponible",
-    Intervalo: PACE_I[vdot] ?? "No disponible",
-    Repetición: PACE_R[vdot] ?? "No disponible",
+    Easy:       PACE_S[vdot] ?? fallback,
+    Marathon:   PACE_M[vdot] ?? fallback,
+    Threshold:  PACE_U[vdot] ?? fallback,
+    Interval:   PACE_I[vdot] ?? fallback,
+    Repetition: PACE_R[vdot] ?? fallback,
   };
 }
 
@@ -358,15 +465,15 @@ function buildPlan(distance, raceDate, raceTime) {
       week,
       phase: days.phase,
       schedule: [
-        { name: "Lunes",    date: dateAt(1), value: days.lun, type: "easy" },
-        { name: "Martes",   date: dateAt(2), value: days.mar, type: "easy" },
-        { name: "Miércoles", date: dateAt(3), value: days.mie, type: "quality" },
-        { name: "Jueves",   date: dateAt(4), value: days.jue, type: "easy" },
-        { name: "Viernes",  date: dateAt(5), value: days.vie, type: "easy" },
-        { name: "Sábado",   date: dateAt(6), value: days.sab, type: "quality" },
+        { day: "mon", date: dateAt(1), value: days.lun, type: "easy" },
+        { day: "tue", date: dateAt(2), value: days.mar, type: "easy" },
+        { day: "wed", date: dateAt(3), value: days.mie, type: "quality" },
+        { day: "thu", date: dateAt(4), value: days.jue, type: "easy" },
+        { day: "fri", date: dateAt(5), value: days.vie, type: "easy" },
+        { day: "sat", date: dateAt(6), value: days.sab, type: "quality" },
         week === 12
-          ? { name: "Domingo", date: dateAt(7), value: "Día de la carrera!!", type: "race" }
-          : { name: "Domingo", date: dateAt(7), value: days.dom, type: "easy" },
+          ? { day: "sun", date: dateAt(7), value: null, type: "race" }
+          : { day: "sun", date: dateAt(7), value: days.dom, type: "easy" },
       ],
       km: days.km,
     });
@@ -381,32 +488,41 @@ function renderError(msg) {
   out.innerHTML = `<div class="error">${msg}</div>`;
 }
 
-function renderPlan(plan) {
+function renderPlan(plan, lang) {
+  const t = I18N[lang];
   const out = document.getElementById("output");
   const weeksHTML = plan.weeks.map((w) => {
     const items = w.schedule.map((d) => {
-      const cls = d.type === "quality" ? "q" : (d.value === "" ? "rest" : "");
-      const display = d.value === "" ? "Descanso" : d.value;
-      return `<li class="${cls}">${d.name.padEnd(10)}(${d.date}): ${display}</li>`;
+      const dayName = t.days[d.day].padEnd(10);
+      let display, cls;
+      if (d.type === "race") {
+        display = t.raceDay; cls = "q";
+      } else if (!d.value) {
+        display = t.rest; cls = "rest";
+      } else {
+        display = translateWorkout(d.value, lang);
+        cls = d.type === "quality" ? "q" : "";
+      }
+      return `<li class="${cls}">${dayName}(${d.date}): ${display}</li>`;
     }).join("");
     return `
       <section class="week">
-        <h3>Semana ${w.week} — ${w.phase}</h3>
+        <h3>${t.week} ${w.week} — ${t.phases[w.phase]}</h3>
         <ul>${items}</ul>
-        <p class="km">Kms: ${w.km}</p>
+        <p class="km">${t.kms}: ${w.km}</p>
       </section>`;
   }).join("");
 
-  const pacesRows = Object.entries(plan.paces).map(([k, v]) =>
-    `<dt>${k}</dt><dd>${v}</dd>`).join("");
+  const paceRows = Object.entries(plan.paces).map(([k, v]) =>
+    `<dt>${t.paces[k]}</dt><dd>${v}</dd>`).join("");
 
   out.innerHTML = `
     ${weeksHTML}
     <section class="paces">
-      <h3>VDOT ${plan.vdot} — Ritmos de entrenamiento (min/km)</h3>
+      <h3>VDOT ${plan.vdot} — ${t.pacesHeading}</h3>
       <dl>
-        ${pacesRows}
-        <dt>A/D</dt><dd>Aceleración/Desaceleración: 30"/50"</dd>
+        ${paceRows}
+        <dt>A/D</dt><dd>${t.accelDecel}</dd>
       </dl>
     </section>
   `;
@@ -416,37 +532,66 @@ function renderPlan(plan) {
 
 function defaultRaceDate() {
   const d = addDays(new Date(), 84);
-  // Round to next Sunday
   const offset = (7 - d.getDay()) % 7;
   return formatDate(addDays(d, offset));
 }
 
+const LANG_STORAGE_KEY = "vtrain.lang";
+const SUPPORTED_LANGS = ["en", "es"];
+let currentLang = "en";
+let currentPlan = null;
+
+function pickInitialLang() {
+  const saved = localStorage.getItem(LANG_STORAGE_KEY);
+  return SUPPORTED_LANGS.includes(saved) ? saved : "en";
+}
+
+function applyStaticI18n(lang) {
+  const t = I18N[lang];
+  document.documentElement.lang = t.htmlLang;
+  document.title = t.title;
+  for (const el of document.querySelectorAll("[data-i18n]")) {
+    el.innerHTML = t[el.dataset.i18n];
+  }
+  for (const opt of document.getElementById("distancia").options) {
+    opt.textContent = t.distances[opt.value];
+  }
+  for (const btn of document.querySelectorAll(".lang-toggle button")) {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  }
+}
+
+function setLanguage(lang) {
+  if (!SUPPORTED_LANGS.includes(lang)) return;
+  currentLang = lang;
+  try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (_) {}
+  applyStaticI18n(lang);
+  if (currentPlan) renderPlan(currentPlan, lang);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  setLanguage(pickInitialLang());
   document.getElementById("fechaCarrera").value = defaultRaceDate();
+
+  for (const btn of document.querySelectorAll(".lang-toggle button")) {
+    btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+  }
 
   document.getElementById("plan-form").addEventListener("submit", (e) => {
     e.preventDefault();
+    const t = I18N[currentLang];
     const distance = Number(document.getElementById("distancia").value);
     const raceDate = document.getElementById("fechaCarrera").value;
     const raceTime = document.getElementById("tiempoObjetivo").value;
 
-    if (!isSunday(raceDate)) {
-      renderError("La fecha de la carrera debe ser un domingo. El plan asume Q1 miércoles, Q2 sábado y carrera el domingo.");
-      return;
-    }
-    if (![0, 10, 21, 42].includes(distance)) {
-      renderError("Distancia inválida. Debe ser 10, 21, 42 o 0 para entrenamiento general.");
-      return;
-    }
+    if (!isSunday(raceDate)) { renderError(t.errSunday); return; }
+    if (![0, 10, 21, 42].includes(distance)) { renderError(t.errDistance); return; }
     const seconds = parseTimeToSeconds(raceTime);
-    if (!Number.isFinite(seconds) || seconds <= 0) {
-      renderError("Formato de tiempo objetivo inválido. Debe ser hh:mm:ss.");
-      return;
-    }
+    if (!Number.isFinite(seconds) || seconds <= 0) { renderError(t.errTime); return; }
 
     try {
-      const plan = buildPlan(distance, raceDate, raceTime);
-      renderPlan(plan);
+      currentPlan = buildPlan(distance, raceDate, raceTime);
+      renderPlan(currentPlan, currentLang);
       document.getElementById("output").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {
       renderError(err.message);
