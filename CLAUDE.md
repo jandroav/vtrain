@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-vtrain is a single-page static site that generates 12-week running training plans following Jack Daniels' VDOT methodology. Hosted on GitHub Pages at `vtrain.jandroav.net`. The UI is bilingual (English default, Spanish toggle) — UI copy lives in `I18N` in `vtrain.js`, and the workout strings in `PLAN_CONFIG` are stored in Spanish Daniels notation and translated to English at render time by `translateWorkout`.
+vtrain is a single-page static site that generates 12-week running training plans following Jack Daniels' VDOT methodology. Hosted on GitHub Pages at `vtrain.jandroav.net`. The UI is bilingual (English default, Spanish toggle) and supports both km and miles via a unit toggle. UI copy lives in `I18N`. Workouts in `PLAN_CONFIG` are stored in km + Spanish Daniels notation and converted at render time: `translateWorkout` for ES→EN, `applyUnitToWorkout`/`paceKmToMi`/`applyUnitToKmTotal` for km→mi (track meter reps stay metric — track is universal). Distance precision: continuous values round to 0.25 mi, weekly totals round to whole miles.
 
 ## Files
 

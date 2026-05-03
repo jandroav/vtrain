@@ -31,12 +31,15 @@ before(() => {
   const stripped = SRC.replace(/document\.addEventListener[\s\S]*$/, "");
   const expose = `
     Object.assign(globalThis, {
-      PLAN_CONFIG, I18N, DEFAULT_GOAL_TIMES,
+      PLAN_CONFIG, I18N, DEFAULT_GOAL_TIMES, DISTANCE_NUMS,
+      MI_PER_KM, KM_PER_MI,
       HALF_MARATHON_VDOT, MARATHON_VDOT, TEN_K_VDOT,
       PACE_S, PACE_M, PACE_U, PACE_I, PACE_R,
       parseTimeToSeconds, getVDOT, calculatePaces, selectWeek,
       dayKey, parseLocalDate, formatDate, addDays,
       translateWorkout, buildPlan, buildICS, renderPlan,
+      kmToMi, paceKmToMi, applyUnitToWorkout, applyUnitToKmTotal, fmtNum,
+      setUnit, setLanguage,
     });
   `;
   // eslint-disable-next-line no-eval
@@ -434,10 +437,22 @@ describe("ICS export (RFC 5545)", () => {
 // ---------- Render output ----------
 
 describe("renderPlan output", () => {
-  test("contains every major section + export buttons", () => {
+  function renderInto(unit, lang = "en") {
     const plan = globalThis.buildPlan(42, "2026-12-13", "02:28:00");
     const out = { innerHTML: "" };
     globalThis.document.getElementById = () => out;
+    // currentUnit is module-scoped — set it via a function that exposes it indirectly
+    // by reaching through globalThis; the renderPlan reads `currentUnit` directly.
+    // Simulate by re-evaluating the eval'd script with currentUnit overridden? Easier:
+    // we assigned currentUnit via setUnit which needs DOM. So we'll do it the simple way:
+    // expose currentUnit's setter through the test by reaching into the module.
+    // Workaround: directly mutate via a global set on first eval.
+    // For now, rely on renderPlan reading currentUnit which defaults to "km";
+    // so we simulate "mi" by checking applyUnitToWorkout output instead.
+    return { plan, out };
+  }
+  test("contains every major section + export buttons", () => {
+    const { plan, out } = renderInto("km");
     globalThis.renderPlan(plan, "en");
     for (const cls of ["plan-actions", "vdot-hero", "phase-strip", "mileage-chart", "weeks-list"]) {
       assert.match(out.innerHTML, new RegExp(`class="${cls}`), `missing ${cls}`);
@@ -448,17 +463,123 @@ describe("renderPlan output", () => {
     const weekCards = (out.innerHTML.match(/class="week-card/g) || []).length;
     assert.equal(weekCards, 12);
   });
-  test("re-renders cleanly on language change (no leftover Spanish in EN)", () => {
-    const plan = globalThis.buildPlan(42, "2026-12-13", "02:28:00");
-    const out = { innerHTML: "" };
-    globalThis.document.getElementById = () => out;
+  test("default render is in km — heading shows min/km, totals show 'k'", () => {
+    const { plan, out } = renderInto("km");
     globalThis.renderPlan(plan, "en");
-    // After translation, no untranslated Spanish words in workouts (check a sample of phrases)
+    assert.match(out.innerHTML, /\(min\/km\)/);
+    assert.match(out.innerHTML, /\d+k</);          // weekly total ends with k
+    assert.doesNotMatch(out.innerHTML, /\d+mi</);  // no miles in weekly total
+  });
+  test("re-renders cleanly on language change (no leftover Spanish in EN)", () => {
+    const { plan, out } = renderInto("km");
+    globalThis.renderPlan(plan, "en");
     const en = out.innerHTML;
     assert.ok(!en.includes("Lunes"));
     assert.ok(!en.includes("Miércoles"));
     assert.ok(!/\bDescanso\b/.test(en));
     assert.ok(!/Día de la carrera/.test(en));
+  });
+  test("mi mode: heading reads min/mi, weekly totals end with 'mi', paces converted", () => {
+    globalThis.setUnit("mi");
+    const { plan, out } = renderInto("mi");
+    globalThis.renderPlan(plan, "en");
+    assert.match(out.innerHTML, /\(min\/mi\)/);
+    assert.match(out.innerHTML, /\d+mi</);
+    assert.doesNotMatch(out.innerHTML, /\d+k</);
+    // VDOT 67 marathon pace = 3:31/km → 5:40/mi
+    assert.match(out.innerHTML, />5:40</);
+    // Restore default for other tests
+    globalThis.setUnit("km");
+  });
+});
+
+// ---------- Unit conversion ----------
+
+describe("Unit conversion", () => {
+  test("kmToMi rounds to nearest quarter mile (default)", () => {
+    assert.equal(globalThis.kmToMi(8),    5);     // 4.97 → 5.00
+    assert.equal(globalThis.kmToMi(1.2),  0.75);  // 0.745 → 0.75
+    assert.equal(globalThis.kmToMi(1.5),  1);     // 0.932 → 1.00
+    assert.equal(globalThis.kmToMi(3),    1.75);  // 1.864 → 1.75
+    assert.equal(globalThis.kmToMi(16),   10);    // 9.94  → 10.00
+    assert.equal(globalThis.kmToMi(26),   16.25); // 16.16 → 16.25
+    assert.equal(globalThis.kmToMi(30),   18.75); // 18.64 → 18.75
+  });
+  test("kmToMi (int) rounds to whole miles", () => {
+    assert.equal(globalThis.kmToMi(122, "int"), 76);
+    assert.equal(globalThis.kmToMi(153, "int"), 95);
+    assert.equal(globalThis.kmToMi(42,  "int"), 26);
+  });
+
+  test("paceKmToMi: single value", () => {
+    assert.equal(globalThis.paceKmToMi("4:31"), "7:16");  // 271s/km × 1.609 = 436s/mi
+    assert.equal(globalThis.paceKmToMi("4:15"), "6:50");  // threshold
+    assert.equal(globalThis.paceKmToMi("3:55"), "6:18");  // I-pace
+    assert.equal(globalThis.paceKmToMi("5:00"), "8:03");
+  });
+  test("paceKmToMi: ranges", () => {
+    assert.equal(globalThis.paceKmToMi("4:56 - 5:34"), "7:56 - 8:58");
+  });
+  test("paceKmToMi: malformed input is identity", () => {
+    assert.equal(globalThis.paceKmToMi("—"), "—");
+    assert.equal(globalThis.paceKmToMi(""), "");
+  });
+
+  test("applyUnitToWorkout: continuous km converts, track meters stay", () => {
+    // Track meter reps ("1000 I", "200 R") have a space between number and pace
+    // letter — must NOT be converted (track is metric globally).
+    assert.equal(
+      globalThis.applyUnitToWorkout("8S + 5 X 1000 I C/3 MIN TR + 5S (16k)", "mi"),
+      "5S + 5 X 1000 I C/3 MIN TR + 3S (10mi)",
+    );
+  });
+  test("applyUnitToWorkout: km-style interval reps (1.2I, 1.5U)", () => {
+    assert.equal(
+      globalThis.applyUnitToWorkout("5 X 1.2I + 3 X 1.5U", "mi"),
+      "5 X 0.75I + 3 X 1U",
+    );
+  });
+  test("applyUnitToWorkout: M and U pace continuous", () => {
+    assert.equal(
+      globalThis.applyUnitToWorkout("3S + 16M + 3S (22k)", "mi"),
+      "1.75S + 10M + 1.75S (14mi)",
+    );
+  });
+  test("applyUnitToWorkout: km mode is identity", () => {
+    const orig = "8S + 5 X 1000 I C/3 MIN TR + 5S (16k)";
+    assert.equal(globalThis.applyUnitToWorkout(orig, "km"), orig);
+  });
+  test("applyUnitToWorkout works on already-translated EN strings", () => {
+    // Order in the renderer: translateWorkout (ES→EN), then applyUnitToWorkout.
+    // Pace letters E/T/M must be handled too.
+    assert.equal(
+      globalThis.applyUnitToWorkout("3E + 16M + 3E (22k)", "mi"),
+      "1.75E + 10M + 1.75E (14mi)",
+    );
+    assert.equal(
+      globalThis.applyUnitToWorkout("4E + 7T + 4E (15k)", "mi"),
+      "2.5E + 4.25T + 2.5E (9mi)",
+    );
+  });
+
+  test("applyUnitToKmTotal: '122k' → '76mi'", () => {
+    assert.equal(globalThis.applyUnitToKmTotal("122k", "mi"), "76mi");
+    assert.equal(globalThis.applyUnitToKmTotal("153k", "mi"), "95mi");
+    assert.equal(globalThis.applyUnitToKmTotal("42k", "mi"), "26mi");
+  });
+  test("applyUnitToKmTotal: km mode is identity", () => {
+    assert.equal(globalThis.applyUnitToKmTotal("122k", "km"), "122k");
+  });
+
+  test("DISTANCE_NUMS covers all 4 distances in both units", () => {
+    for (const u of ["km", "mi"]) {
+      for (const d of [42, 21, 10, 0]) {
+        assert.ok(globalThis.DISTANCE_NUMS[u][d], `DISTANCE_NUMS[${u}][${d}] missing`);
+      }
+    }
+    assert.equal(globalThis.DISTANCE_NUMS.mi[42], "26.2");
+    assert.equal(globalThis.DISTANCE_NUMS.mi[21], "13.1");
+    assert.equal(globalThis.DISTANCE_NUMS.mi[10], "6.2");
   });
 });
 

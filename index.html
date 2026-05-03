@@ -89,7 +89,14 @@
       flex-shrink: 0;
     }
 
-    .lang-toggle {
+    .header-toggles {
+      display: inline-flex;
+      gap: 0.4rem;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .lang-toggle, .unit-toggle {
       display: inline-flex;
       gap: 2px;
       padding: 2px;
@@ -97,7 +104,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
     }
-    .lang-toggle button {
+    .lang-toggle button, .unit-toggle button {
       background: none;
       border: none;
       padding: 0.35rem 0.7rem;
@@ -110,12 +117,12 @@
       border-radius: 5px;
       transition: color 0.15s, background 0.15s;
     }
-    .lang-toggle button:hover { color: var(--fg-muted); }
-    .lang-toggle button.active {
+    .lang-toggle button:hover, .unit-toggle button:hover { color: var(--fg-muted); }
+    .lang-toggle button.active, .unit-toggle button.active {
       background: var(--bg-hover);
       color: var(--fg);
     }
-    .lang-toggle button:focus-visible {
+    .lang-toggle button:focus-visible, .unit-toggle button:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 1px;
     }
@@ -371,6 +378,19 @@
       letter-spacing: 0.04em;
     }
 
+    .paces-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+    .paces-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-muted);
+    }
     .paces-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -757,9 +777,15 @@
       </svg>
       <span>vtrain</span>
     </a>
-    <div class="lang-toggle" role="group" aria-label="Language">
-      <button type="button" data-lang="en">EN</button>
-      <button type="button" data-lang="es">ES</button>
+    <div class="header-toggles">
+      <div class="unit-toggle" role="group" aria-label="Units">
+        <button type="button" data-unit="km">KM</button>
+        <button type="button" data-unit="mi">MI</button>
+      </div>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="es">ES</button>
+      </div>
     </div>
   </header>
 

@@ -281,7 +281,7 @@ const I18N = {
     raceDay: "Race day",
     kms: "Total",
     mileageHeading: "Weekly mileage",
-    pacesHeading: "Training paces (min/km)",
+    pacesHeading: "Training paces ({units})",
     paces: {
       Easy: "Easy",
       Marathon: "Marathon",
@@ -348,7 +348,7 @@ const I18N = {
     raceDay: "Día de la carrera",
     kms: "Total",
     mileageHeading: "Kilometraje semanal",
-    pacesHeading: "Ritmos de entrenamiento (min/km)",
+    pacesHeading: "Ritmos de entrenamiento ({units})",
     paces: {
       Easy: "Suave",
       Marathon: "Ritmo Maratón",
@@ -416,6 +416,64 @@ function translateWorkout(text, lang) {
     .replace(/\bX\b/g, "x")
     .replace(/KM\s+PROG/g, "km prog")
     .replace(/\bKMS\b/g, "km");
+}
+
+// ---------- Unit conversion (km ↔ mi) ----------
+
+const MI_PER_KM = 0.621371;
+const KM_PER_MI = 1.609344;
+
+// Distance numbers shown on the distance picker cards.
+const DISTANCE_NUMS = {
+  km: { 42: "42",   21: "21",   10: "10",  0: "—" },
+  mi: { 42: "26.2", 21: "13.1", 10: "6.2", 0: "—" },
+};
+
+// Format a number for display. Native toString gives "5" / "0.75" / "16.25"
+// without trailing zeros, which matches how runners read distances.
+function fmtNum(n) {
+  return n.toString();
+}
+
+// Round to nearest quarter mile. Runners typically think in quarters
+// (track laps are 0.25 mi). Use mode "int" for weekly totals where
+// integer miles are cleaner.
+function kmToMi(km, mode = "quarter") {
+  const mi = km * MI_PER_KM;
+  if (mode === "int") return Math.round(mi);
+  return Math.round(mi * 4) / 4;
+}
+
+// "M:SS" per km → "M:SS" per mi. Handles single values and "X:XX - Y:YY" ranges.
+function paceKmToMi(pace) {
+  if (typeof pace !== "string") return pace;
+  if (pace.includes(" - ")) return pace.split(" - ").map(paceKmToMi).join(" - ");
+  if (!pace.includes(":")) return pace;
+  const [m, s] = pace.split(":").map(Number);
+  if (Number.isNaN(m) || Number.isNaN(s)) return pace;
+  const totalSec = Math.round((m * 60 + s) * KM_PER_MI);
+  return `${Math.floor(totalSec / 60)}:${String(totalSec % 60).padStart(2, "0")}`;
+}
+
+// Convert continuous-km values inside a workout string to miles. Track interval
+// reps are space-separated (e.g. "1000 I", "200 R") and stay in meters because
+// that's how track work is universally specified.
+//
+// Continuous km example: "8S" (8 km easy) → "5E" in EN/mi.
+// Track meter example:   "5 X 1000 I" stays "5 x 1000 I" — still 1000m reps.
+function applyUnitToWorkout(text, unit) {
+  if (unit === "km") return text;
+  return text
+    .replace(/(\d+(?:\.\d+)?)([SEMUTI])\b/g, (_, num, pace) => `${fmtNum(kmToMi(parseFloat(num)))}${pace}`)
+    .replace(/\((\d+(?:\.\d+)?)k\)/g, (_, num) => `(${kmToMi(parseFloat(num), "int")}mi)`);
+}
+
+// Convert weekly total like "122k" → "76mi".
+function applyUnitToKmTotal(kmStr, unit) {
+  if (unit === "km") return kmStr;
+  const num = parseFloat(kmStr);
+  if (Number.isNaN(num)) return kmStr;
+  return `${kmToMi(num, "int")}mi`;
 }
 
 // ---------- Helpers ----------
@@ -550,14 +608,17 @@ function renderError(msg) {
   out.innerHTML = `<div class="error">${msg}</div>`;
 }
 
-function renderHeroStats(plan, t) {
-  const paces = Object.entries(plan.paces).map(([k, v]) => `
-    <div class="pace-card pace-${k.toLowerCase()}">
-      <div class="pace-name">${t.paces[k]}</div>
-      <div class="pace-value">${v}</div>
-      <div class="pace-desc">${t.paceDescriptions[k]}</div>
-    </div>
-  `).join("");
+function renderHeroStats(plan, t, unit) {
+  const paces = Object.entries(plan.paces).map(([k, v]) => {
+    const value = unit === "mi" ? paceKmToMi(v) : v;
+    return `
+      <div class="pace-card pace-${k.toLowerCase()}">
+        <div class="pace-name">${t.paces[k]}</div>
+        <div class="pace-value">${value}</div>
+        <div class="pace-desc">${t.paceDescriptions[k]}</div>
+      </div>
+    `;
+  }).join("");
   const meta = `${t.distancesShort[plan.distance]} · ${plan.raceTime}`;
   return `
     <div class="vdot-hero">
@@ -566,7 +627,10 @@ function renderHeroStats(plan, t) {
         <div class="vdot-value">${plan.vdot}</div>
         <div class="vdot-meta">${meta}</div>
       </div>
-      <div class="paces-grid">${paces}</div>
+      <div class="paces-section">
+        <div class="paces-label">${t.pacesHeading}</div>
+        <div class="paces-grid">${paces}</div>
+      </div>
     </div>
   `;
 }
@@ -590,7 +654,7 @@ function renderPhaseStrip(t) {
   `;
 }
 
-function renderMileageChart(plan, t) {
+function renderMileageChart(plan, t, unit) {
   const kms = plan.weeks.map(w => parseInt(w.km, 10) || 0);
   const max = Math.max(...kms, 1);
   const W = 600, H = 110, BAR_W = 36, GAP = 8;
@@ -603,10 +667,11 @@ function renderMileageChart(plan, t) {
     const h = Math.max(2, (km / max) * chartH);
     const x = startX + i * (BAR_W + GAP);
     const y = chartBottom - h;
+    const label = unit === "mi" ? kmToMi(km, "int") : km;
     return `
       <g class="bar-group" data-phase="${w.phase}">
         <rect x="${x}" y="${y}" width="${BAR_W}" height="${h}" rx="3"/>
-        <text x="${x + BAR_W/2}" y="${y - 5}" class="bar-value">${km}</text>
+        <text x="${x + BAR_W/2}" y="${y - 5}" class="bar-value">${label}</text>
         <text x="${x + BAR_W/2}" y="${H - 3}" class="bar-label">${i + 1}</text>
       </g>
     `;
@@ -622,7 +687,7 @@ function renderMileageChart(plan, t) {
   `;
 }
 
-function renderWeekCard(w, t, lang, idx) {
+function renderWeekCard(w, t, lang, unit, idx) {
   const rows = w.schedule.map((d) => {
     let display, badge = "";
     let valueCls = "day-value";
@@ -633,7 +698,7 @@ function renderWeekCard(w, t, lang, idx) {
       display = t.rest;
       valueCls += " is-rest";
     } else {
-      display = translateWorkout(d.value, lang);
+      display = applyUnitToWorkout(translateWorkout(d.value, lang), unit);
       if (d.type === "q1") badge = `<span class="day-badge badge-quality">${t.dayTypes.q1}</span>`;
       else if (d.type === "q2") badge = `<span class="day-badge badge-quality">${t.dayTypes.q2}</span>`;
       else if (d.type === "long") badge = `<span class="day-badge badge-long">${t.dayTypes.long}</span>`;
@@ -657,7 +722,7 @@ function renderWeekCard(w, t, lang, idx) {
           <span class="week-num">${t.week} ${w.week}</span>
           <span class="week-phase">${t.phases[w.phase]}</span>
         </div>
-        <div class="week-km">${w.km}</div>
+        <div class="week-km">${applyUnitToKmTotal(w.km, unit)}</div>
       </header>
       <ul class="day-list">${rows}</ul>
     </article>
@@ -690,14 +755,17 @@ function renderPlanActions(t) {
 
 function renderPlan(plan, lang) {
   const t = I18N[lang];
+  const unit = currentUnit;
+  // Pace heading carries the unit suffix, swapped depending on selected unit.
+  const localT = { ...t, pacesHeading: t.pacesHeading.replace("{units}", unit === "mi" ? "min/mi" : "min/km") };
   const out = document.getElementById("output");
   out.innerHTML = `
-    ${renderPlanActions(t)}
-    ${renderHeroStats(plan, t)}
-    ${renderPhaseStrip(t)}
-    ${renderMileageChart(plan, t)}
+    ${renderPlanActions(localT)}
+    ${renderHeroStats(plan, localT, unit)}
+    ${renderPhaseStrip(localT)}
+    ${renderMileageChart(plan, localT, unit)}
     <div class="weeks-list">
-      ${plan.weeks.map((w, i) => renderWeekCard(w, t, lang, i)).join("")}
+      ${plan.weeks.map((w, i) => renderWeekCard(w, localT, lang, unit, i)).join("")}
     </div>
   `;
 }
@@ -716,7 +784,7 @@ function dateToICS(dateStr) {
   return dateStr.replace(/-/g, "");
 }
 
-function buildICS(plan, lang) {
+function buildICS(plan, lang, unit = currentUnit) {
   const t = I18N[lang];
   const stamp = new Date().toISOString().replace(/[-:]|\.\d+/g, "").slice(0, 15) + "Z";
   const lines = [
@@ -744,7 +812,7 @@ function buildICS(plan, lang) {
         summary = t.rest;
         description = `${phaseLabel}\n${t.week} ${w.week} · ${dayName}`;
       } else {
-        const workout = translateWorkout(d.value, lang);
+        const workout = applyUnitToWorkout(translateWorkout(d.value, lang), unit);
         summary = `${tag}${workout}`;
         description = `${phaseLabel}\n${t.week} ${w.week} · ${dayName}\n${workout}`;
       }
@@ -814,6 +882,36 @@ const SUPPORTED_LANGS = ["en", "es"];
 let currentLang = "en";
 let currentPlan = null;
 
+const UNIT_STORAGE_KEY = "vtrain.unit";
+const SUPPORTED_UNITS = ["km", "mi"];
+let currentUnit = "km";
+
+function pickInitialUnit() {
+  const saved = localStorage.getItem(UNIT_STORAGE_KEY);
+  return SUPPORTED_UNITS.includes(saved) ? saved : "km";
+}
+
+function applyUnitUI(unit) {
+  for (const btn of document.querySelectorAll(".unit-toggle button")) {
+    btn.classList.toggle("active", btn.dataset.unit === unit);
+  }
+  for (const card of document.querySelectorAll(".distance-card")) {
+    const radio = card.querySelector("input");
+    const numEl = card.querySelector(".dist-num");
+    if (radio && numEl && DISTANCE_NUMS[unit][radio.value] !== undefined) {
+      numEl.textContent = DISTANCE_NUMS[unit][radio.value];
+    }
+  }
+}
+
+function setUnit(unit) {
+  if (!SUPPORTED_UNITS.includes(unit)) return;
+  currentUnit = unit;
+  try { localStorage.setItem(UNIT_STORAGE_KEY, unit); } catch (_) {}
+  applyUnitUI(unit);
+  if (currentPlan) renderPlan(currentPlan, currentLang);
+}
+
 function pickInitialLang() {
   const saved = localStorage.getItem(LANG_STORAGE_KEY);
   return SUPPORTED_LANGS.includes(saved) ? saved : "en";
@@ -851,12 +949,16 @@ function setLanguage(lang) {
 
 document.addEventListener("DOMContentLoaded", () => {
   setLanguage(pickInitialLang());
+  setUnit(pickInitialUnit());
   document.getElementById("fechaCarrera").value = defaultRaceDate();
   syncDefaultGoalTime();
   updateDistanceCards();
 
   for (const btn of document.querySelectorAll(".lang-toggle button")) {
     btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+  }
+  for (const btn of document.querySelectorAll(".unit-toggle button")) {
+    btn.addEventListener("click", () => setUnit(btn.dataset.unit));
   }
   for (const radio of document.querySelectorAll('input[name="distancia"]')) {
     radio.addEventListener("change", () => {
