@@ -238,6 +238,52 @@
       opacity: 0.85;
     }
 
+    .custom-distance-row {
+      margin-top: 0.5rem;
+    }
+    .custom-distance-row[hidden] { display: none; }
+    .custom-distance-input {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+    }
+    .custom-distance-input input {
+      width: 100%;
+      padding: 0.7rem 3.25rem 0.7rem 0.8rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--fg);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      color-scheme: dark;
+      -moz-appearance: textfield;
+    }
+    .custom-distance-input input::-webkit-outer-spin-button,
+    .custom-distance-input input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .custom-distance-input input:hover { border-color: var(--border-strong); }
+    .custom-distance-input input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .custom-distance-unit {
+      position: absolute;
+      right: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      pointer-events: none;
+    }
+
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -814,10 +860,19 @@
             <span class="dist-num">10</span>
             <span class="dist-label" data-distance-label="10"></span>
           </label>
-          <label class="distance-card">
-            <input type="radio" name="distancia" value="0">
+          <label class="distance-card distance-card--custom">
+            <input type="radio" name="distancia" value="custom">
             <span class="dist-num">—</span>
-            <span class="dist-label" data-distance-label="0"></span>
+            <span class="dist-label" data-distance-label="custom"></span>
+          </label>
+        </div>
+        <div class="custom-distance-row" hidden>
+          <label class="field">
+            <span class="field-label" data-i18n="labelCustomDistance"></span>
+            <span class="custom-distance-input">
+              <input type="number" id="customDistance" min="0.5" max="200" step="0.25" placeholder="">
+              <span class="custom-distance-unit">km</span>
+            </span>
           </label>
         </div>
       </div>

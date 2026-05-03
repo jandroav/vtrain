@@ -1,44 +1,11 @@
 // vtrain — single-page training plan generator (Daniels' VDOT methodology).
 "use strict";
 
-// ---------- VDOT tables (race time per VDOT) ----------
-// Values are stored as "h:mm:ss" or "mm:ss" strings; parsed on lookup.
-
-const HALF_MARATHON_VDOT = {
-  30: "2:21:04", 31: "2:17:21", 32: "2:13:49", 33: "2:10:27", 34: "2:07:16",
-  35: "2:04:13", 36: "2:01:19", 37: "1:58:34", 38: "1:55:55", 39: "1:53:24",
-  40: "1:50:59", 41: "1:48:40", 42: "1:46:27", 43: "1:44:20", 44: "1:42:17",
-  45: "1:40:20", 46: "1:38:27", 47: "1:36:38", 48: "1:34:53", 49: "1:33:12",
-  50: "1:31:35", 51: "1:30:02", 52: "1:28:31", 53: "1:27:04", 54: "1:25:40",
-  55: "1:24:18", 56: "1:23:00", 57: "1:21:43", 58: "1:20:30", 59: "1:19:18",
-  60: "1:18:09", 61: "1:17:02", 62: "1:15:57", 63: "1:14:54", 64: "1:13:53",
-  65: "1:12:53", 66: "1:11:56", 67: "1:11:00", 68: "1:10:05", 69: "1:09:12",
-  70: "1:08:21",
-};
-
-const MARATHON_VDOT = {
-  30: "4:49:17", 31: "4:41:57", 32: "4:34:59", 33: "4:28:22", 34: "4:22:03",
-  35: "4:16:03", 36: "4:10:19", 37: "4:04:50", 38: "3:59:35", 39: "3:54:34",
-  40: "3:49:45", 41: "3:45:09", 42: "3:40:43", 43: "3:36:28", 44: "3:32:23",
-  45: "3:28:26", 46: "3:24:39", 47: "3:21:00", 48: "3:17:29", 49: "3:14:06",
-  50: "3:10:49", 51: "3:07:39", 52: "3:04:36", 53: "3:01:39", 54: "2:58:47",
-  55: "2:56:01", 56: "2:53:20", 57: "2:50:45", 58: "2:48:14", 59: "2:45:47",
-  60: "2:43:25", 61: "2:41:08", 62: "2:38:54", 63: "2:36:44", 64: "2:34:38",
-  65: "2:32:35", 66: "2:30:36", 67: "2:28:40", 68: "2:26:47", 69: "2:24:57",
-  70: "2:23:10",
-};
-
-const TEN_K_VDOT = {
-  30: "0:54:00", 31: "0:52:23", 32: "0:50:54", 33: "0:49:30", 34: "0:48:14",
-  35: "0:47:04", 36: "0:45:57", 37: "0:44:54", 38: "0:43:55", 39: "0:42:59",
-  40: "0:42:06", 41: "0:41:15", 42: "0:40:27", 43: "0:39:41", 44: "0:38:58",
-  45: "0:38:16", 46: "0:37:36", 47: "0:36:57", 48: "0:36:20", 49: "0:35:45",
-  50: "0:35:11", 51: "0:34:38", 52: "0:34:06", 53: "0:33:35", 54: "0:33:05",
-  55: "0:32:36", 56: "0:32:09", 57: "0:31:42", 58: "0:31:17", 59: "0:30:51",
-  60: "0:30:26", 61: "0:30:02", 62: "0:29:39", 63: "0:29:16", 64: "0:28:54",
-  65: "0:28:33", 66: "0:28:12", 67: "0:27:52", 68: "0:27:32", 69: "0:27:13",
-  70: "0:26:54",
-};
+// VDOT is computed from race time + distance via Daniels' canonical formula
+// (no table lookup) so any race distance — predefined or custom — produces
+// internally consistent values. The pace tables (PACE_S/M/U/I/R) remain as
+// VDOT-indexed lookups since Daniels' published pace tables are themselves
+// the deliverable of the methodology.
 
 // ---------- Training-pace tables (min:sec per km, by VDOT) ----------
 
@@ -267,14 +234,15 @@ const I18N = {
     labelDistance: "Distance",
     labelRaceDate: "Race date",
     labelTargetTime: "Goal time",
+    labelCustomDistance: "Custom distance",
     submit: "Generate plan",
     distances: {
-      42: "Marathon (42 km)",
-      21: "Half marathon (21 km)",
-      10: "10 km",
-      0:  "General training",
+      42:     "Marathon (42 km)",
+      21:     "Half marathon (21 km)",
+      10:     "10 km",
+      custom: "Custom distance",
     },
-    distancesShort: { 42: "Marathon", 21: "Half", 10: "10K", 0: "General" },
+    distancesShort: { 42: "Marathon", 21: "Half", 10: "10K", custom: "Custom" },
     week: "Week",
     weeksRange: "Weeks",
     rest: "Rest",
@@ -323,7 +291,8 @@ const I18N = {
     actionPrint: "Print / PDF",
     actionHint: "Import the .ics file in Google Calendar (Settings → Import) or open it in Apple Calendar.",
     errDate: "Invalid race date.",
-    errDistance: "Invalid distance. Must be 10, 21, 42, or 0 for general training.",
+    errDistance: "Invalid distance. Must be 10, 21, 42 km or a custom value.",
+    errCustom: "Custom distance must be a positive number.",
     errTime: "Invalid goal-time format. Must be hh:mm:ss.",
   },
   es: {
@@ -334,14 +303,15 @@ const I18N = {
     labelDistance: "Distancia",
     labelRaceDate: "Fecha de la carrera",
     labelTargetTime: "Tiempo objetivo",
+    labelCustomDistance: "Distancia personalizada",
     submit: "Generar plan",
     distances: {
-      42: "Maratón (42 km)",
-      21: "Media maratón (21 km)",
-      10: "10 km",
-      0:  "Entrenamiento general",
+      42:     "Maratón (42 km)",
+      21:     "Media maratón (21 km)",
+      10:     "10 km",
+      custom: "Distancia personalizada",
     },
-    distancesShort: { 42: "Maratón", 21: "Media", 10: "10K", 0: "General" },
+    distancesShort: { 42: "Maratón", 21: "Media", 10: "10K", custom: "Personal." },
     week: "Semana",
     weeksRange: "Semanas",
     rest: "Descanso",
@@ -390,7 +360,8 @@ const I18N = {
     actionPrint: "Imprimir / PDF",
     actionHint: "Importa el archivo .ics en Google Calendar (Ajustes → Importar) o ábrelo en Calendario de Apple.",
     errDate: "Fecha de la carrera inválida.",
-    errDistance: "Distancia inválida. Debe ser 10, 21, 42 o 0 para entrenamiento general.",
+    errDistance: "Distancia inválida. Debe ser 10, 21, 42 km o un valor personalizado.",
+    errCustom: "La distancia personalizada debe ser un número positivo.",
     errTime: "Formato de tiempo objetivo inválido. Debe ser hh:mm:ss.",
   },
 };
@@ -423,10 +394,12 @@ function translateWorkout(text, lang) {
 const MI_PER_KM = 0.621371;
 const KM_PER_MI = 1.609344;
 
-// Distance numbers shown on the distance picker cards.
+// Distance numbers shown on the distance picker cards. The custom card's
+// number reflects whatever the user types into the custom-distance input
+// (or "—" before they enter a value); see updateCustomDistanceDisplay.
 const DISTANCE_NUMS = {
-  km: { 42: "42",   21: "21",   10: "10",  0: "—" },
-  mi: { 42: "26.2", 21: "13.1", 10: "6.2", 0: "—" },
+  km: { 42: "42",   21: "21",   10: "10",  custom: "—" },
+  mi: { 42: "26.2", 21: "13.1", 10: "6.2", custom: "—" },
 };
 
 // Format a number for display. Native toString gives "5" / "0.75" / "16.25"
@@ -485,21 +458,27 @@ function parseTimeToSeconds(str) {
   return NaN;
 }
 
+// Daniels' VDOT formula. Given race velocity v (m/min) and race duration
+// t (min), VO2 cost at that velocity is -4.6 + 0.182258v + 0.000104v², and
+// the fraction of VO2max sustainable for that duration is the bi-exponential
+// %VO2max = 0.8 + 0.1894393·e^(-0.012778·t) + 0.2989558·e^(-0.1932605·t).
+// VDOT = VO2_cost / %VO2max. Clamped to the supported pace-table range 30..79.
+function computeVDOT(distanceKm, raceTimeSeconds) {
+  if (!(distanceKm > 0) || !(raceTimeSeconds > 0)) return 30;
+  const distanceM = distanceKm * 1000;
+  const timeMin = raceTimeSeconds / 60;
+  const velocity = distanceM / timeMin;
+  const pct = 0.8
+            + 0.1894393 * Math.exp(-0.012778 * timeMin)
+            + 0.2989558 * Math.exp(-0.1932605 * timeMin);
+  const vo2 = -4.6 + 0.182258 * velocity + 0.000104 * velocity * velocity;
+  const vdot = Math.round(vo2 / pct);
+  return Math.max(30, Math.min(79, vdot));
+}
+
 function getVDOT(targetSeconds, distance) {
-  let table;
-  switch (distance) {
-    case 42: table = MARATHON_VDOT; break;
-    case 10: table = TEN_K_VDOT; break;
-    case 21:
-    case 0:  table = HALF_MARATHON_VDOT; break;
-    default: throw new Error(`Distancia no soportada: ${distance}`);
-  }
-  let bestVdot = 0, minDiff = Infinity;
-  for (const [vdot, time] of Object.entries(table)) {
-    const diff = Math.abs(parseTimeToSeconds(time) - targetSeconds);
-    if (diff < minDiff) { minDiff = diff; bestVdot = Number(vdot); }
-  }
-  return bestVdot;
+  if (!(distance > 0)) throw new Error(`Distancia no soportada: ${distance}`);
+  return computeVDOT(distance, targetSeconds);
 }
 
 function calculatePaces(vdot) {
@@ -513,6 +492,17 @@ function calculatePaces(vdot) {
   };
 }
 
+// Pick the predefined plan template (10 / 21 / 42 km) closest to a given
+// race distance — used to route custom distances to a sensible workout set.
+//   ≤ 15.5 km     → 10k template (covers 5k, 10k, 12k, ...)
+//   15.5..31.5 km → half-marathon template (15k, 20k, 25k, ...)
+//   > 31.5 km     → marathon template (30k+, ultras)
+function closestTemplate(distanceKm) {
+  if (distanceKm <= 15.5) return 10;
+  if (distanceKm <= 31.5) return 21;
+  return 42;
+}
+
 // Resolve a week's per-distance fields into position-indexed slots.
 // The schedule rhythm is anchored to race day, not to weekday:
 //   d1, d2 = recovery / medium-easy days after the long run
@@ -520,21 +510,22 @@ function calculatePaces(vdot) {
 //   d4, d5 = easy days
 //   c2     = day 6 — Q2 quality session
 //   d7     = day 7 — long run (or race in week 12)
+//
+// Non-standard distances (anything other than 10/21/42) borrow the closest
+// predefined template.
 function selectWeek(weekCfg, distance) {
-  const suffix = distance === 0 ? "pre" : String(distance);
-  const c1Key = distance === 0 ? "pre1" : `c1-${suffix}`;
-  const c2Key = distance === 0 ? "pre2" : `c2-${suffix}`;
-  const kmKey = distance === 0 ? "km-pre" : `km-${suffix}`;
+  const templateDist = [10, 21, 42].includes(distance) ? distance : closestTemplate(distance);
+  const suffix = String(templateDist);
   return {
     phase: weekCfg.phase,
     d1: weekCfg[`d1-${suffix}`] ?? "",
     d2: weekCfg[`d2-${suffix}`] ?? "",
-    q1: weekCfg[c1Key],
+    q1: weekCfg[`c1-${suffix}`],
     d4: weekCfg[`d4-${suffix}`] ?? "",
     d5: weekCfg[`d5-${suffix}`] ?? "",
-    q2: weekCfg[c2Key],
+    q2: weekCfg[`c2-${suffix}`],
     d7: weekCfg[`d7-${suffix}`] ?? "",
-    km: weekCfg[kmKey] ?? "",
+    km: weekCfg[`km-${suffix}`] ?? "",
   };
 }
 
@@ -608,6 +599,15 @@ function renderError(msg) {
   out.innerHTML = `<div class="error">${msg}</div>`;
 }
 
+// Label for plan.distance: short name for predefined races, "<n> km/mi"
+// for custom distances.
+function renderPlanDistance(plan, t, unit) {
+  const short = t.distancesShort[plan.distance];
+  if (short) return short;
+  const value = unit === "mi" ? kmToMi(plan.distance) : plan.distance;
+  return `${fmtNum(value)} ${unit}`;
+}
+
 function renderHeroStats(plan, t, unit) {
   const paces = Object.entries(plan.paces).map(([k, v]) => {
     const value = unit === "mi" ? paceKmToMi(v) : v;
@@ -619,7 +619,7 @@ function renderHeroStats(plan, t, unit) {
       </div>
     `;
   }).join("");
-  const meta = `${t.distancesShort[plan.distance]} · ${plan.raceTime}`;
+  const meta = `${renderPlanDistance(plan, t, unit)} · ${plan.raceTime}`;
   return `
     <div class="vdot-hero">
       <div class="vdot-block">
@@ -793,7 +793,7 @@ function buildICS(plan, lang, unit = currentUnit) {
     "PRODID:-//vtrain//Daniels Training Plan//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
-    `X-WR-CALNAME:${escapeICS(`vtrain · ${t.distancesShort[plan.distance]} · ${plan.raceDate}`)}`,
+    `X-WR-CALNAME:${escapeICS(`vtrain · ${renderPlanDistance(plan, t, unit)} · ${plan.raceDate}`)}`,
   ];
 
   for (const w of plan.weeks) {
@@ -806,7 +806,7 @@ function buildICS(plan, lang, unit = currentUnit) {
                 : d.type === "long" ? `[${t.dayTypes.long}] ` : "";
 
       if (d.type === "race") {
-        summary = `${t.raceDay} · ${t.distancesShort[plan.distance]} (${plan.raceTime})`;
+        summary = `${t.raceDay} · ${renderPlanDistance(plan, t, unit)} (${plan.raceTime})`;
         description = `${phaseLabel}\n${t.week} ${w.week} · ${dayName}`;
       } else if (!d.value) {
         summary = t.rest;
@@ -864,17 +864,39 @@ function defaultRaceDate() {
 // These are placeholders the user will adjust to their real goal — the
 // important thing is that they're plausible for the distance.
 const DEFAULT_GOAL_TIMES = {
-  42: "03:30:00",
-  21: "01:35:00",
-  10: "00:42:00",
-  0:  "01:35:00",
+  42:     "03:30:00",
+  21:     "01:35:00",
+  10:     "00:42:00",
+  custom: "01:35:00", // half-marathon-equivalent placeholder for custom distance
 };
 
 function syncDefaultGoalTime() {
   const checked = document.querySelector('input[name="distancia"]:checked');
   if (!checked) return;
-  const def = DEFAULT_GOAL_TIMES[Number(checked.value)];
+  const key = checked.value === "custom" ? "custom" : Number(checked.value);
+  const def = DEFAULT_GOAL_TIMES[key];
   if (def) document.getElementById("tiempoObjetivo").value = def;
+}
+
+function updateCustomDistanceVisibility() {
+  const checked = document.querySelector('input[name="distancia"]:checked');
+  const row = document.querySelector(".custom-distance-row");
+  if (!row) return;
+  const isCustom = checked && checked.value === "custom";
+  row.hidden = !isCustom;
+  if (isCustom) {
+    const input = document.getElementById("customDistance");
+    if (input && !input.value) input.focus();
+  }
+}
+
+// Mirror the custom input's value into the Custom card's dist-num so the
+// card label tracks what the user has typed.
+function updateCustomDistanceDisplay() {
+  const input = document.getElementById("customDistance");
+  const card = document.querySelector(".distance-card--custom .dist-num");
+  if (!input || !card) return;
+  card.textContent = input.value || "—";
 }
 
 const LANG_STORAGE_KEY = "vtrain.lang";
@@ -891,17 +913,36 @@ function pickInitialUnit() {
   return SUPPORTED_UNITS.includes(saved) ? saved : "km";
 }
 
+// Track the unit the custom-distance input was last interpreted as, so that
+// when the user toggles km↔mi we convert their entered value rather than
+// reinterpreting it as the new unit.
+let customInputLastUnit = "km";
+
 function applyUnitUI(unit) {
   for (const btn of document.querySelectorAll(".unit-toggle button")) {
     btn.classList.toggle("active", btn.dataset.unit === unit);
   }
-  for (const card of document.querySelectorAll(".distance-card")) {
+  // Predefined cards: swap dist-num between e.g. "42" and "26.2".
+  for (const card of document.querySelectorAll(".distance-card:not(.distance-card--custom)")) {
     const radio = card.querySelector("input");
     const numEl = card.querySelector(".dist-num");
     if (radio && numEl && DISTANCE_NUMS[unit][radio.value] !== undefined) {
       numEl.textContent = DISTANCE_NUMS[unit][radio.value];
     }
   }
+  // Custom-distance unit suffix follows the toggle; convert the entered value too.
+  const unitLabel = document.querySelector(".custom-distance-unit");
+  if (unitLabel) unitLabel.textContent = unit;
+  const customInput = document.getElementById("customDistance");
+  if (customInput && customInput.value && customInputLastUnit !== unit) {
+    const v = parseFloat(customInput.value);
+    if (Number.isFinite(v) && v > 0) {
+      const converted = unit === "mi" ? v * MI_PER_KM : v * KM_PER_MI;
+      customInput.value = (Math.round(converted * 4) / 4).toString();
+    }
+  }
+  customInputLastUnit = unit;
+  updateCustomDistanceDisplay();
 }
 
 function setUnit(unit) {
@@ -953,6 +994,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("fechaCarrera").value = defaultRaceDate();
   syncDefaultGoalTime();
   updateDistanceCards();
+  updateCustomDistanceVisibility();
+  updateCustomDistanceDisplay();
 
   for (const btn of document.querySelectorAll(".lang-toggle button")) {
     btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
@@ -964,6 +1007,19 @@ document.addEventListener("DOMContentLoaded", () => {
     radio.addEventListener("change", () => {
       updateDistanceCards();
       syncDefaultGoalTime();
+      updateCustomDistanceVisibility();
+    });
+  }
+  const customInput = document.getElementById("customDistance");
+  if (customInput) {
+    customInput.addEventListener("input", updateCustomDistanceDisplay);
+    customInput.addEventListener("focus", () => {
+      // Typing into the input auto-selects the Custom radio.
+      const customRadio = document.querySelector('input[name="distancia"][value="custom"]');
+      if (customRadio && !customRadio.checked) {
+        customRadio.checked = true;
+        customRadio.dispatchEvent(new Event("change", { bubbles: true }));
+      }
     });
   }
 
@@ -979,12 +1035,23 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const t = I18N[currentLang];
     const checked = document.querySelector('input[name="distancia"]:checked');
-    const distance = checked ? Number(checked.value) : NaN;
     const raceDate = document.getElementById("fechaCarrera").value;
     const raceTime = document.getElementById("tiempoObjetivo").value;
 
     if (!raceDate || isNaN(parseLocalDate(raceDate).getTime())) { renderError(t.errDate); return; }
-    if (![0, 10, 21, 42].includes(distance)) { renderError(t.errDistance); return; }
+    if (!checked) { renderError(t.errDistance); return; }
+
+    let distance;
+    if (checked.value === "custom") {
+      const raw = parseFloat(document.getElementById("customDistance").value);
+      if (!Number.isFinite(raw) || raw <= 0) { renderError(t.errCustom); return; }
+      // Input is in the currently displayed unit; normalize to km for buildPlan.
+      distance = currentUnit === "mi" ? raw * KM_PER_MI : raw;
+    } else {
+      distance = Number(checked.value);
+      if (![10, 21, 42].includes(distance)) { renderError(t.errDistance); return; }
+    }
+
     const seconds = parseTimeToSeconds(raceTime);
     if (!Number.isFinite(seconds) || seconds <= 0) { renderError(t.errTime); return; }
 

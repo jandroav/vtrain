@@ -16,7 +16,8 @@ before(() => {
   globalThis.document = {
     documentElement: { lang: "en" },
     title: "",
-    getElementById: () => ({ innerHTML: "" }),
+    getElementById: () => ({ innerHTML: "", value: "", focus: () => {} }),
+    querySelector: () => null,
     querySelectorAll: () => [],
     addEventListener: () => {},
     createElement: () => ({ click: () => {} }),
@@ -33,9 +34,9 @@ before(() => {
     Object.assign(globalThis, {
       PLAN_CONFIG, I18N, DEFAULT_GOAL_TIMES, DISTANCE_NUMS,
       MI_PER_KM, KM_PER_MI,
-      HALF_MARATHON_VDOT, MARATHON_VDOT, TEN_K_VDOT,
       PACE_S, PACE_M, PACE_U, PACE_I, PACE_R,
-      parseTimeToSeconds, getVDOT, calculatePaces, selectWeek,
+      parseTimeToSeconds, getVDOT, computeVDOT, closestTemplate,
+      calculatePaces, selectWeek,
       dayKey, parseLocalDate, formatDate, addDays,
       translateWorkout, buildPlan, buildICS, renderPlan,
       kmToMi, paceKmToMi, applyUnitToWorkout, applyUnitToKmTotal, fmtNum,
@@ -48,29 +49,87 @@ before(() => {
 
 // ---------- VDOT lookup ----------
 
-describe("VDOT lookup", () => {
+describe("VDOT computation (Daniels' formula)", () => {
+  // VDOT comes from a closed-form formula now, validated against published
+  // Daniels reference values for the canonical race distances.
   test("marathon 02:28:00 → VDOT 67", () => {
     assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("02:28:00"), 42), 67);
   });
-  test("marathon 03:10:49 → VDOT 50 (exact match)", () => {
+  test("marathon 03:10:49 → VDOT 50 (Daniels' canonical anchor)", () => {
     assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("03:10:49"), 42), 50);
+  });
+  test("half-marathon 01:31:35 → VDOT 50 (Daniels' canonical anchor)", () => {
+    assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("01:31:35"), 21), 50);
   });
   test("half-marathon 01:34:53 → VDOT 48", () => {
     assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("01:34:53"), 21), 48);
   });
-  test("10k 35:11 → VDOT 50 (regression: was 70 when routed through HALF table)", () => {
-    assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("00:35:11"), 10), 50);
+  test("10k 41:32 → VDOT 50 (Daniels' canonical 10K anchor)", () => {
+    // Regression: previous TEN_K_VDOT table had wrong values (35:11 indexed
+    // as VDOT 50 instead of 60). The formula corrects this.
+    assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("00:41:32"), 10), 50);
   });
-  test("general training (distance 0) routes through half-marathon table", () => {
-    assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("01:34:53"), 0), 48);
+  test("10k 35:11 → VDOT ~60 (formula, was wrongly 50 in table)", () => {
+    assert.equal(globalThis.getVDOT(globalThis.parseTimeToSeconds("00:35:11"), 10), 60);
   });
-  test("unsupported distance throws", () => {
-    assert.throws(() => globalThis.getVDOT(1000, 5));
+  test("custom 15 km in 1:00:00 → reasonable VDOT (~50)", () => {
+    const v = globalThis.getVDOT(globalThis.parseTimeToSeconds("01:00:00"), 15);
+    assert.ok(v >= 45 && v <= 55, `expected ~50, got ${v}`);
   });
-  test("very fast marathon clamps to highest VDOT in table", () => {
-    // 02:00:00 marathon is faster than the table's fastest entry (VDOT 70 = 02:23:10)
+  test("zero or negative distance throws", () => {
+    assert.throws(() => globalThis.getVDOT(1000, 0));
+    assert.throws(() => globalThis.getVDOT(1000, -5));
+  });
+  test("very fast marathon clamps to top of pace-table range (79)", () => {
     const v = globalThis.getVDOT(globalThis.parseTimeToSeconds("02:00:00"), 42);
-    assert.equal(v, 70);
+    assert.equal(v, 79);
+  });
+  test("very slow marathon clamps to bottom of pace-table range (30)", () => {
+    const v = globalThis.getVDOT(globalThis.parseTimeToSeconds("06:00:00"), 42);
+    assert.equal(v, 30);
+  });
+});
+
+describe("closestTemplate", () => {
+  test("≤ 15.5 km → 10k template", () => {
+    assert.equal(globalThis.closestTemplate(5),    10);
+    assert.equal(globalThis.closestTemplate(10),   10);
+    assert.equal(globalThis.closestTemplate(15),   10);
+    assert.equal(globalThis.closestTemplate(15.5), 10);
+  });
+  test("15.5 < d ≤ 31.5 km → half-marathon template", () => {
+    assert.equal(globalThis.closestTemplate(20),   21);
+    assert.equal(globalThis.closestTemplate(25),   21);
+    assert.equal(globalThis.closestTemplate(31.5), 21);
+  });
+  test("> 31.5 km → marathon template (covers ultras too)", () => {
+    assert.equal(globalThis.closestTemplate(32),  42);
+    assert.equal(globalThis.closestTemplate(50),  42);
+    assert.equal(globalThis.closestTemplate(100), 42);
+  });
+});
+
+describe("Custom distance plan", () => {
+  test("buildPlan accepts non-standard distance and returns 12 weeks", () => {
+    const plan = globalThis.buildPlan(15, "2026-12-13", "01:00:00");
+    assert.equal(plan.weeks.length, 12);
+    assert.equal(plan.distance, 15);
+  });
+  test("custom 5 km routes to 10k template content", () => {
+    const tenK   = globalThis.buildPlan(10, "2026-12-13", "00:42:00");
+    const fiveK  = globalThis.buildPlan(5,  "2026-12-13", "00:20:00");
+    // Same template = same Q sessions
+    assert.equal(fiveK.weeks[0].schedule[2].value, tenK.weeks[0].schedule[2].value);
+  });
+  test("custom 30 km routes to half-marathon template content", () => {
+    const half  = globalThis.buildPlan(21, "2026-12-13", "01:35:00");
+    const cust  = globalThis.buildPlan(30, "2026-12-13", "02:30:00");
+    assert.equal(cust.weeks[0].schedule[2].value, half.weeks[0].schedule[2].value);
+  });
+  test("custom 50 km (ultra) routes to marathon template content", () => {
+    const mara = globalThis.buildPlan(42, "2026-12-13", "03:30:00");
+    const ultr = globalThis.buildPlan(50, "2026-12-13", "04:30:00");
+    assert.equal(ultr.weeks[0].schedule[2].value, mara.weeks[0].schedule[2].value);
   });
 });
 
@@ -100,14 +159,7 @@ describe("Pace calculation", () => {
 
 // ---------- VDOT / pace table coverage ----------
 
-describe("VDOT / pace tables", () => {
-  test("all VDOT race-time tables cover 30..70", () => {
-    for (let v = 30; v <= 70; v++) {
-      assert.ok(globalThis.MARATHON_VDOT[v],       `MARATHON_VDOT[${v}] missing`);
-      assert.ok(globalThis.HALF_MARATHON_VDOT[v],  `HALF_MARATHON_VDOT[${v}] missing`);
-      assert.ok(globalThis.TEN_K_VDOT[v],          `TEN_K_VDOT[${v}] missing`);
-    }
-  });
+describe("Pace tables", () => {
   test("all pace tables cover 30..79", () => {
     for (let v = 30; v <= 79; v++) {
       assert.ok(globalThis.PACE_S[v], `PACE_S[${v}] missing`);
@@ -204,8 +256,8 @@ describe("buildPlan structure", () => {
       assert.ok(valid.has(w.phase), `unknown phase: ${w.phase}`);
     }
   });
-  test("every distance produces a complete plan", () => {
-    for (const dist of [42, 21, 10, 0]) {
+  test("every distance produces a complete plan (predefined + custom)", () => {
+    for (const dist of [42, 21, 10, 5, 15, 30, 50]) {
       const plan = globalThis.buildPlan(dist, "2026-12-13", "01:35:00");
       assert.equal(plan.weeks.length, 12);
       for (const w of plan.weeks) {
@@ -571,9 +623,9 @@ describe("Unit conversion", () => {
     assert.equal(globalThis.applyUnitToKmTotal("122k", "km"), "122k");
   });
 
-  test("DISTANCE_NUMS covers all 4 distances in both units", () => {
+  test("DISTANCE_NUMS covers all 4 distance options in both units", () => {
     for (const u of ["km", "mi"]) {
-      for (const d of [42, 21, 10, 0]) {
+      for (const d of [42, 21, 10, "custom"]) {
         assert.ok(globalThis.DISTANCE_NUMS[u][d], `DISTANCE_NUMS[${u}][${d}] missing`);
       }
     }
@@ -588,8 +640,8 @@ describe("Unit conversion", () => {
 describe("Default goal times", () => {
   // Regression: marathon previously stayed at 01:35:00 (a half-marathon time)
   // when the user picked the marathon card — visually nonsensical for a 42 km race.
-  test("every distance has a default", () => {
-    for (const dist of [42, 21, 10, 0]) {
+  test("every distance option has a default", () => {
+    for (const dist of [42, 21, 10, "custom"]) {
       assert.ok(globalThis.DEFAULT_GOAL_TIMES[dist], `no default for ${dist}`);
     }
   });
@@ -608,11 +660,11 @@ describe("Default goal times", () => {
     assert.ok(s >= 30 * 60);
     assert.ok(s <= 75 * 60);
   });
-  test("each default maps to a VDOT in the supported range (30..70)", () => {
-    for (const dist of [42, 21, 10, 0]) {
+  test("each default maps to a VDOT in the supported range (30..79)", () => {
+    for (const dist of [42, 21, 10]) {
       const t = globalThis.DEFAULT_GOAL_TIMES[dist];
       const v = globalThis.getVDOT(globalThis.parseTimeToSeconds(t), dist);
-      assert.ok(v >= 30 && v <= 70, `${dist}: ${t} → VDOT ${v} out of range`);
+      assert.ok(v >= 30 && v <= 79, `${dist}: ${t} → VDOT ${v} out of range`);
     }
   });
 });

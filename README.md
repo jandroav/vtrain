@@ -1,11 +1,12 @@
 # vtrain
 
-12-week training plan generator following [Jack Daniels'](https://en.wikipedia.org/wiki/Jack_Daniels_(coach)) VDOT methodology — for 10k, half-marathon, marathon, and general training.
+12-week training plan generator following [Jack Daniels'](https://en.wikipedia.org/wiki/Jack_Daniels_(coach)) VDOT methodology — for 10k, half-marathon, marathon, or any custom race distance.
 
 🔗 **[vtrain.jandroav.net](https://vtrain.jandroav.net)**
 
 ## Features
 
+- **Any race distance**: pick from the four predefined distances (marathon, half, 10k) or enter a custom distance — vtrain routes custom distances to the closest predefined plan template
 - **Daniels methodology**, 12 weeks across the four phases:
   - **Phase I — Foundation** (s1–s3): easy running + strides
   - **Phase II — Early Quality** (s4–s6): repetition (R) work
